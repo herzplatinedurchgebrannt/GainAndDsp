@@ -26,18 +26,10 @@ public:
 
 private:
 
+    int slRow = 7;
+    int slCol = 2;
+
     //distortion
-    //juce::ScopedPointer<juce::Slider> driveKnob;
-    //juce::ScopedPointer<juce::Slider> rangeKnob;
-    //juce::ScopedPointer<juce::Slider> blendKnob;
-    //juce::ScopedPointer<juce::Slider> volumeKnob;
-
-    //juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> driveAttachement;
-    //juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> rangeAttachement;
-    //juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> blendAttachement;
-    //juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> volumeAttachement;
-
-
     juce::Slider driveKnob;
     juce::Slider rangeKnob;
     juce::Slider blendKnob;
@@ -47,7 +39,6 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> rangeAttachement;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> blendAttachement;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> volumeAttachement;
-
 
     //filter
     juce::Slider filterCutoffDial;
