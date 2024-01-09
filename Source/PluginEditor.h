@@ -27,7 +27,7 @@ public:
 private:
 
     int slRow = 7;
-    int slCol = 2;
+    int slCol = 4;
 
     //distortion
     juce::Slider driveKnob;

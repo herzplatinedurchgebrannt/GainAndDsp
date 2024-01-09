@@ -70,9 +70,12 @@ void GainAndDspAudioProcessorEditor::paint (juce::Graphics& g)
     //g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
     g.fillAll(juce::Colours::mintcream);
     
-    juce::Rectangle <float> area(25, 25, 650, 350);
     g.setColour(juce::Colours::black);
-    g.drawRoundedRectangle(area, 20.0f, 2.0f);
+    juce::Rectangle <float> areaTop(25, 25, 650, 150);
+    g.drawRoundedRectangle(areaTop, 20.0f, 2.0f);
+
+    juce::Rectangle <float> areaBottom(25, 200, 650, 150);
+    g.drawRoundedRectangle(areaBottom, 20.0f, 2.0f);
 
     g.setColour(juce::Colours::black);
     g.setFont(15.0f);
@@ -94,7 +97,8 @@ void GainAndDspAudioProcessorEditor::resized()
 
 {
     //need to come back and dynamically set these...ok for now
-    juce::Rectangle<int> area = getLocalBounds().reduced(40);
+    juce::Rectangle<int> areaTop = getLocalBounds().reduced(40);
+    juce::Rectangle<int> areaBottom = getLocalBounds().reduced(40);
 
     //distortionm
     driveKnob.setBounds( ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
@@ -103,6 +107,6 @@ void GainAndDspAudioProcessorEditor::resized()
     volumeKnob.setBounds(((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
 
     //filter
-    filterCutoffDial.setBounds(((getWidth() / 7) * 5) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
-    filterResDial.setBounds(((getWidth() / 7) * 6) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
+    filterCutoffDial.setBounds(((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
+    filterResDial.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
 }
