@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "SingleEqBandProcessor.h"
 
 //==============================================================================
 /**
@@ -53,7 +54,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    juce::AudioProcessorValueTreeState& getState();
+    void updateParams();
 
     void updateFilter();
 
@@ -63,7 +64,7 @@ public:
 
 private:
 
-    juce::ScopedPointer<juce::AudioProcessorValueTreeState> state;
+    SingleEqBandProcessor toneControlEqProcessor;
 
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> lowPassFilter;
 

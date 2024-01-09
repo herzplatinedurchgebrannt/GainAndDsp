@@ -55,6 +55,13 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     filterResAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_RES", filterResDial);
 
 
+    //tone
+    toneSlider.setSliderStyle(juce::Slider::Rotary);
+    toneSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    addAndMakeVisible(&toneSlider);
+    toneValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "TONE_VALUE", toneSlider);
+
+
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
 }
@@ -91,6 +98,10 @@ void GainAndDspAudioProcessorEditor::paint (juce::Graphics& g)
     //filter
     g.drawText("Cutoff",    ((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
     g.drawText("Resonance", ((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+
+    g.drawText("Tone", ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 205, 100, 100, juce::Justification::centred, false);
+
+
 }
 
 void GainAndDspAudioProcessorEditor::resized()
@@ -109,4 +120,8 @@ void GainAndDspAudioProcessorEditor::resized()
     //filter
     filterCutoffDial.setBounds(((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
     filterResDial.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
+
+    toneSlider.setBounds(((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) +  150, 100, 100);
+
+
 }

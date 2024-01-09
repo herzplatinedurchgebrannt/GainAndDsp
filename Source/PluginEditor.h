@@ -47,6 +47,11 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterCutoffAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterResAttachment;
 
+    //tone
+    juce::Slider toneSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> toneValueAttachement;
+
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     GainAndDspAudioProcessor& audioProcessor;

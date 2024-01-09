@@ -24,16 +24,6 @@ GainAndDspAudioProcessor::GainAndDspAudioProcessor()
                     lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 20000.0f, 0.1f))
 #endif
 {
-    //state = new juce::AudioProcessorValueTreeState(*this, nullptr);
-    //state->createAndAddParameter("drive", "Drive", "Drive", juce::NormalisableRange<float>(0.f, 1.f, 0.0001), 1.0, nullptr, nullptr);
-    //state->createAndAddParameter("range", "Range", "Range", juce::NormalisableRange<float>(0.f, 3000.f, 0.0001), 1.0, nullptr, nullptr);
-    //state->createAndAddParameter("blend", "Blend", "Blend", juce::NormalisableRange<float>(0.f, 1.f, 0.0001), 1.0, nullptr, nullptr);
-    //state->createAndAddParameter("volume", "Volume", "Volume", juce::NormalisableRange<float>(0.f, 3.f, 0.0001), 1.0, nullptr, nullptr);
-
-    //state->state = juce::ValueTree("drive");
-    //state->state = juce::ValueTree("range");
-    //state->state = juce::ValueTree("blend");
-    //state->state = juce::ValueTree("volume");
 }
 
 GainAndDspAudioProcessor::~GainAndDspAudioProcessor()
@@ -107,13 +97,26 @@ void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-
+    // 
     lastSampleRate = sampleRate;
-
+    
     juce::dsp::ProcessSpec spec;
     spec.sampleRate = lastSampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getMainBusNumOutputChannels();
+
+    updateParams();
+
+    SingleEqBandProcessor::Band toneControlEqBand(
+        "High",
+        SingleEqBandProcessor::FilterType::Peak,
+        2450.0f, // frequency
+        1.1f,    // q
+        juce::Decibels::decibelsToGain(0));
+    toneControlEqProcessor.setBand(toneControlEqBand);
+    toneControlEqProcessor.prepare(spec);
+
+
 
     lowPassFilter.reset();
     lowPassFilter.prepare(spec);
@@ -169,8 +172,7 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-
-
+    //get the current slider values
     auto driveValue = valueTree.getRawParameterValue("GAIN_DRIVE");
     float drive = driveValue->load();
 
@@ -183,15 +185,10 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     auto volumeValue = valueTree.getRawParameterValue("GAIN_VOLUME");
     float volume = volumeValue->load();
     
-    std::cout << "drive" << std::endl;
-
-
-
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-
-
+    //distortion processing
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
@@ -209,15 +206,28 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         }
     }
 
+
+    //filter processing
     juce::dsp::AudioBlock<float> block(buffer);
+    juce::dsp::ProcessContextReplacing<float> context = juce::dsp::ProcessContextReplacing<float>(block);
+
     updateFilter();
-    lowPassFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
+    lowPassFilter.process(context);
+
+    updateParams();
+    toneControlEqProcessor.process(context);
 }
 
-juce::AudioProcessorValueTreeState& GainAndDspAudioProcessor::getState()
+
+void GainAndDspAudioProcessor::updateParams()
 {
-    return *state;
-};
+    auto toneValue = valueTree.getRawParameterValue("TONE_VALUE");
+    float tone = toneValue->load();
+
+    // Line equation for f(0) = -10 and f(10) = 5.4 (empirically tested values that sound good)
+    float toneBandGainInDb = 1.54 * tone - 10;
+    toneControlEqProcessor.setBandGain(juce::Decibels::decibelsToGain(toneBandGainInDb));
+}
 
 //==============================================================================
 bool GainAndDspAudioProcessor::hasEditor() const
@@ -261,7 +271,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout GainAndDspAudioProcessor::cr
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_DRIVE", "GainDrive", 0.f, 1.f, 0.0001));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_RANGE", "GainRange", 0.f, 3000.f, 0.0001));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_BLEND", "GainBlend", 0.f, 1.f, 0.0001));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_VOLUME", "GainVOlume", 0.f, 3.f, 0.0001));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_VOLUME", "GainVolume", 0.f, 3.f, 0.0001));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("TONE_VALUE", "ToneValue", 0.0f, 10.0f, 0.1f));
 
     return { params.begin(), params.end() };
 }
