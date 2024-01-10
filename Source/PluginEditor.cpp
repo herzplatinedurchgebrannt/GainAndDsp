@@ -42,8 +42,8 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
 
     //filter
     filterCutoffDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    filterCutoffDial.setRange(20.0f, 20000.0f);
-    filterCutoffDial.setValue(600.0f);
+    filterCutoffDial.setRange(20.0f, 500.0f);
+    filterCutoffDial.setValue(100);
     filterCutoffDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
     filterCutoffDial.setPopupDisplayEnabled(true, true, this);
     filterCutoffDial.setSkewFactorFromMidPoint(1000.0f);

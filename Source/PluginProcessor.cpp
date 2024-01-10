@@ -21,7 +21,8 @@ GainAndDspAudioProcessor::GainAndDspAudioProcessor()
                      #endif
                        ),
                     valueTree(*this, nullptr, "Parameters", createParameters()),
-                    lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 20000.0f, 0.1f))
+                    //lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 20000.0f, 0.1f))
+                    lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeHighPass(44100, 100, 0.1f))
 #endif
 {
 }
@@ -136,7 +137,7 @@ void GainAndDspAudioProcessor::updateFilter()
     auto filterResValue = valueTree.getRawParameterValue("FILTER_RES");
     float filterRes = filterResValue->load();
 
-    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(lastSampleRate, filterCutoff, filterRes);
+    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(lastSampleRate, filterCutoff, filterRes);
 
 }
 
@@ -181,12 +182,13 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context = juce::dsp::ProcessContextReplacing<float>(block);
 
+    updateFilter();
+    lowPassFilter.process(context);
+
     updateParams();
     distortionProcessor.process(context);
     toneControlEqProcessor.process(context);
 
-    //updateFilter();
-    //lowPassFilter.process(context);
 
 }
 
@@ -262,7 +264,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GainAndDspAudioProcessor::cr
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTER_CUTOFF", "FilterCutoff", 20.0f, 20000.0f, 600.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTER_CUTOFF", "FilterCutoff", 20.0f, 500.0f, 5.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTER_RES", "FilterRes", 0.1f, 1.0f, 0.1f));
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_DRIVE", "GainDrive", 0.f, 1.f, 0.0001));
