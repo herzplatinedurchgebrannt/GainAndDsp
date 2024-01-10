@@ -18,21 +18,25 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     //distortion
     driveKnob.setSliderStyle(juce::Slider::Rotary);
     driveKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    driveKnob.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&driveKnob);
     driveAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_DRIVE", driveKnob);
 
     rangeKnob.setSliderStyle(juce::Slider::Rotary);
     rangeKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    rangeKnob.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&rangeKnob);
     rangeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_RANGE", rangeKnob);
 
     blendKnob.setSliderStyle(juce::Slider::Rotary);
     blendKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    blendKnob.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&blendKnob);
     blendAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_BLEND", blendKnob);
 
     volumeKnob.setSliderStyle(juce::Slider::Rotary);
     volumeKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    volumeKnob.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&volumeKnob);
     volumeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_VOLUME", volumeKnob);
 
@@ -40,7 +44,7 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     filterCutoffDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     filterCutoffDial.setRange(20.0f, 20000.0f);
     filterCutoffDial.setValue(600.0f);
-    filterCutoffDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    filterCutoffDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
     filterCutoffDial.setPopupDisplayEnabled(true, true, this);
     filterCutoffDial.setSkewFactorFromMidPoint(1000.0f);
     addAndMakeVisible(&filterCutoffDial);
@@ -49,7 +53,7 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     filterResDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     filterResDial.setRange(0.1f, 1.0f);
     filterResDial.setValue(2.0f);
-    filterResDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    filterResDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
     filterResDial.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&filterResDial);
     filterResAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_RES", filterResDial);
@@ -58,6 +62,7 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     //tone
     toneSlider.setSliderStyle(juce::Slider::Rotary);
     toneSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    toneSlider.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&toneSlider);
     toneValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "TONE_VALUE", toneSlider);
 
@@ -75,6 +80,10 @@ void GainAndDspAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     //g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+
+    //background = juce::ImageCache::getFromMemory(BinaryData::rust_png, BinaryData::rust_pngSize);
+    //g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
+
     g.fillAll(juce::Colours::mintcream);
     
     g.setColour(juce::Colours::black);

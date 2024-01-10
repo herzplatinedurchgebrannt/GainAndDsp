@@ -172,6 +172,27 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear(i, 0, buffer.getNumSamples());
+
+
+    //filter processing
+    juce::dsp::AudioBlock<float> block(buffer);
+    juce::dsp::ProcessContextReplacing<float> context = juce::dsp::ProcessContextReplacing<float>(block);
+
+    updateParams();
+    distortionProcessor.process(context);
+    toneControlEqProcessor.process(context);
+
+    //updateFilter();
+    //lowPassFilter.process(context);
+
+}
+
+
+void GainAndDspAudioProcessor::updateParams()
+{
     //get the current slider values
     auto driveValue = valueTree.getRawParameterValue("GAIN_DRIVE");
     float drive = driveValue->load();
@@ -184,43 +205,9 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
 
     auto volumeValue = valueTree.getRawParameterValue("GAIN_VOLUME");
     float volume = volumeValue->load();
-    
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear(i, 0, buffer.getNumSamples());
 
-    //distortion processing
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear(i, 0, buffer.getNumSamples());
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        float* channelData = buffer.getWritePointer(channel);
+    distortionProcessor.setValues(drive, range, blend, volume);
 
-        for (int sample = 0; sample < buffer.getNumSamples(); sample++) {
-
-            float cleanSig = *channelData;
-
-            *channelData *= drive * range;
-
-            *channelData = (((((2.f / juce::float_Pi) * atan(*channelData)) * blend) + (cleanSig * (1.f - blend))) / 2.f) * volume;
-            channelData++;
-        }
-    }
-
-
-    //filter processing
-    juce::dsp::AudioBlock<float> block(buffer);
-    juce::dsp::ProcessContextReplacing<float> context = juce::dsp::ProcessContextReplacing<float>(block);
-
-    updateFilter();
-    lowPassFilter.process(context);
-
-    updateParams();
-    toneControlEqProcessor.process(context);
-}
-
-
-void GainAndDspAudioProcessor::updateParams()
-{
     auto toneValue = valueTree.getRawParameterValue("TONE_VALUE");
     float tone = toneValue->load();
 

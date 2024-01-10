@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "SingleEqBandProcessor.h"
+#include "DistortionProcessor.h"
 
 //==============================================================================
 /**
@@ -65,6 +66,7 @@ public:
 private:
 
     SingleEqBandProcessor toneControlEqProcessor;
+    DistortionAudioProcessor distortionProcessor;
 
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> lowPassFilter;
 

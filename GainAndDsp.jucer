@@ -18,6 +18,10 @@
             file="Source/SingleEqBandProcessor.cpp"/>
       <FILE id="swTZHf" name="SingleEqBandProcessor.h" compile="0" resource="0"
             file="Source/SingleEqBandProcessor.h"/>
+      <FILE id="OTxgEU" name="DistortionProcessor.cpp" compile="1" resource="0"
+            file="Source/DistortionProcessor.cpp"/>
+      <FILE id="HLoU4G" name="DistortionProcessor.h" compile="0" resource="0"
+            file="Source/DistortionProcessor.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

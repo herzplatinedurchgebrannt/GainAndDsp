@@ -26,6 +26,9 @@ public:
 
 private:
 
+    juce::Image background;
+
+
     int slRow = 7;
     int slCol = 4;
 
