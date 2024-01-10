@@ -117,10 +117,11 @@ void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     toneControlEqProcessor.setBand(toneControlEqBand);
     toneControlEqProcessor.prepare(spec);
 
-
-
     lowPassFilter.reset();
     lowPassFilter.prepare(spec);
+
+    cabConvolutionProcessor.reset();
+    cabConvolutionProcessor.prepare(spec);
 }
 
 void GainAndDspAudioProcessor::releaseResources()
@@ -189,7 +190,7 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     distortionProcessor.process(context);
     toneControlEqProcessor.process(context);
 
-
+    cabConvolutionProcessor.process(context);
 }
 
 

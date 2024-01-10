@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "SingleEqBandProcessor.h"
 #include "DistortionProcessor.h"
+#include "CabConvolutionProcessor.h"
 
 //==============================================================================
 /**
@@ -69,6 +70,8 @@ private:
     DistortionAudioProcessor distortionProcessor;
 
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> lowPassFilter;
+
+    CabConvolutionProcessor cabConvolutionProcessor;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
