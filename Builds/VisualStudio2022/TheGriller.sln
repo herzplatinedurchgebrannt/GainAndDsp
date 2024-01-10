@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio Version 17
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TheGriller - Standalone Plugin", "TheGriller_StandalonePlugin.vcxproj", "{F18F60C0-F29A-9FA1-4EEF-95DEDB09B881}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC21AD2C-C945-312C-2972-1E41BC2AA39F} = {BC21AD2C-C945-312C-2972-1E41BC2AA39F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TheGriller - VST3", "TheGriller_VST3.vcxproj", "{E534E0BA-9AE3-8542-3313-2A2FF23C3B00}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC21AD2C-C945-312C-2972-1E41BC2AA39F} = {BC21AD2C-C945-312C-2972-1E41BC2AA39F}
+		{4259C01C-F0F3-DB4A-5A24-D1823CF28B0A} = {4259C01C-F0F3-DB4A-5A24-D1823CF28B0A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TheGriller - Shared Code", "TheGriller_SharedCode.vcxproj", "{BC21AD2C-C945-312C-2972-1E41BC2AA39F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TheGriller - VST3 Manifest Helper", "TheGriller_VST3ManifestHelper.vcxproj", "{4259C01C-F0F3-DB4A-5A24-D1823CF28B0A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E534E0BA-9AE3-8542-3313-2A2FF23C3B00}.Debug|x64.ActiveCfg = Debug|x64
+		{E534E0BA-9AE3-8542-3313-2A2FF23C3B00}.Debug|x64.Build.0 = Debug|x64
+		{E534E0BA-9AE3-8542-3313-2A2FF23C3B00}.Release|x64.ActiveCfg = Release|x64
+		{E534E0BA-9AE3-8542-3313-2A2FF23C3B00}.Release|x64.Build.0 = Release|x64
+		{F18F60C0-F29A-9FA1-4EEF-95DEDB09B881}.Debug|x64.ActiveCfg = Debug|x64
+		{F18F60C0-F29A-9FA1-4EEF-95DEDB09B881}.Debug|x64.Build.0 = Debug|x64
+		{F18F60C0-F29A-9FA1-4EEF-95DEDB09B881}.Release|x64.ActiveCfg = Release|x64
+		{F18F60C0-F29A-9FA1-4EEF-95DEDB09B881}.Release|x64.Build.0 = Release|x64
+		{BC21AD2C-C945-312C-2972-1E41BC2AA39F}.Debug|x64.ActiveCfg = Debug|x64
+		{BC21AD2C-C945-312C-2972-1E41BC2AA39F}.Debug|x64.Build.0 = Debug|x64
+		{BC21AD2C-C945-312C-2972-1E41BC2AA39F}.Release|x64.ActiveCfg = Release|x64
+		{BC21AD2C-C945-312C-2972-1E41BC2AA39F}.Release|x64.Build.0 = Release|x64
+		{4259C01C-F0F3-DB4A-5A24-D1823CF28B0A}.Debug|x64.ActiveCfg = Debug|x64
+		{4259C01C-F0F3-DB4A-5A24-D1823CF28B0A}.Debug|x64.Build.0 = Debug|x64
+		{4259C01C-F0F3-DB4A-5A24-D1823CF28B0A}.Release|x64.ActiveCfg = Release|x64
+		{4259C01C-F0F3-DB4A-5A24-D1823CF28B0A}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

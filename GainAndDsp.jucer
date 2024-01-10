@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="ZLCph3" name="GainAndDsp" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
-  <MAINGROUP id="p3hTYu" name="GainAndDsp">
+<JUCERPROJECT id="ZLCph3" name="TheGriller" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              companyName="herzplatine.dsp" companyEmail="alexandermathieu@googlemail.com"
+              companyWebsite="https://github.com/herzplatinedurchgebrannt"
+              pluginVST3Category="Distortion">
+  <MAINGROUP id="p3hTYu" name="TheGriller">
     <GROUP id="{8EA04C08-550E-354E-39EB-289620D18BC9}" name="Source">
       <FILE id="JCtqCh" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
