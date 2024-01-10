@@ -46,7 +46,6 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     filterCutoffDial.setValue(100);
     filterCutoffDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
     filterCutoffDial.setPopupDisplayEnabled(true, true, this);
-    filterCutoffDial.setSkewFactorFromMidPoint(1000.0f);
     addAndMakeVisible(&filterCutoffDial);
     filterCutoffAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_CUTOFF", filterCutoffDial);
 
