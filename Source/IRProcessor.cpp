@@ -64,22 +64,47 @@ void IRProcessor::updateParameters()
     //    std::move(x)
     //) };
 
-    juce::AudioFormatManager manager;
-    manager.registerBasicFormats();
-    std::unique_ptr<juce::AudioFormatReader> reader{ manager.createReaderFor(
-        std::make_unique<juce::MemoryInputStream>(BinaryData::cabsim_wav, BinaryData::cabsim_wavSize, true)
-    ) };
+    if (cabOneIsSelected) {
+        juce::AudioFormatManager manager;
+        manager.registerBasicFormats();
+        std::unique_ptr<juce::AudioFormatReader> reader{ manager.createReaderFor(
+            std::make_unique<juce::MemoryInputStream>(BinaryData::cabsim_wav, BinaryData::cabsim_wavSize, true)
+        ) };
 
 
-    if (reader == nullptr)
-    {
-        jassertfalse;
-        return;
+        if (reader == nullptr)
+        {
+            jassertfalse;
+            return;
+        }
+
+        juce::AudioBuffer<float> buffer(static_cast<int> (reader->numChannels),
+            static_cast<int> (reader->lengthInSamples));
+        reader->read(buffer.getArrayOfWritePointers(), buffer.getNumChannels(), 0, buffer.getNumSamples());
+
+        bufferTransfer.set(BufferWithSampleRate{ std::move(buffer), reader->sampleRate });
+    }
+    else {
+        juce::AudioFormatManager manager;
+        manager.registerBasicFormats();
+        std::unique_ptr<juce::AudioFormatReader> reader{ manager.createReaderFor(
+            std::make_unique<juce::MemoryInputStream>(BinaryData::cabsim_2_wav, BinaryData::cabsim_2_wavSize, true)
+        ) };
+
+
+        if (reader == nullptr)
+        {
+            jassertfalse;
+            return;
+        }
+
+        juce::AudioBuffer<float> buffer(static_cast<int> (reader->numChannels),
+            static_cast<int> (reader->lengthInSamples));
+        reader->read(buffer.getArrayOfWritePointers(), buffer.getNumChannels(), 0, buffer.getNumSamples());
+
+        bufferTransfer.set(BufferWithSampleRate{ std::move(buffer), reader->sampleRate });
     }
 
-    juce::AudioBuffer<float> buffer(static_cast<int> (reader->numChannels),
-        static_cast<int> (reader->lengthInSamples));
-    reader->read(buffer.getArrayOfWritePointers(), buffer.getNumChannels(), 0, buffer.getNumSamples());
 
-    bufferTransfer.set(BufferWithSampleRate{ std::move(buffer), reader->sampleRate });
+
 }
