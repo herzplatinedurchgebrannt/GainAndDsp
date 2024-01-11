@@ -65,14 +65,25 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     toneValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "TONE_VALUE", toneSlider);
 
     //cabinet
-    cabSwitch.setButtonText("Cabinet");
-    cabSwitch.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey);
-    cabSwitch.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::mintcream);
-    cabSwitch.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::black);
-    cabSwitch.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
-    cabSwitch.setClickingTogglesState(true);
-    addAndMakeVisible(cabSwitch);
-    cabAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.valueTree, "CAB_ACTIVE", cabSwitch);
+    cabBypass.setButtonText("Bypass");
+    cabBypass.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey);
+    cabBypass.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::mintcream);
+    cabBypass.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::black);
+    cabBypass.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
+    cabBypass.setClickingTogglesState(true);
+    addAndMakeVisible(cabBypass);
+    cabBypassAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.valueTree, "CAB_ACTIVE", cabBypass);
+
+    cabSelect.setButtonText("Select");
+    cabSelect.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey);
+    cabSelect.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::mintcream);
+    cabSelect.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::black);
+    cabSelect.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
+    cabSelect.setClickingTogglesState(true);
+    addAndMakeVisible(cabSelect);
+    cabSelectAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.valueTree, "CAB_SELECT", cabSelect);
+
+
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -139,7 +150,8 @@ void GainAndDspAudioProcessorEditor::resized()
     filterResDial.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
 
     toneSlider.setBounds(((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) +  125, 100, 100);
-    cabSwitch.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 125, 100, 30);
 
+    cabBypass.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 125, 100, 30);
+    cabSelect.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 175, 100, 30);
 
 }

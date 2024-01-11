@@ -5,6 +5,9 @@
     <Filter Include="TheGriller\Source">
       <UniqueIdentifier>{FE3F44D6-1CB5-F93A-7EDA-1C229DC4388F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TheGriller\Assets">
+      <UniqueIdentifier>{C84B6D75-0E9C-81F0-74C4-ABFC835BC364}</UniqueIdentifier>
+    </Filter>
     <Filter Include="TheGriller">
       <UniqueIdentifier>{E71B59E4-0CE4-ACE9-AF10-DCFD56F6BA94}</UniqueIdentifier>
     </Filter>
@@ -6195,13 +6198,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Source\Assets\cabsim.wav">
-      <Filter>TheGriller</Filter>
+      <Filter>TheGriller\Assets</Filter>
     </None>
     <None Include="..\..\Source\Assets\cabsim_2.wav">
-      <Filter>TheGriller</Filter>
+      <Filter>TheGriller\Assets</Filter>
     </None>
     <None Include="..\..\Source\Assets\cabsim_3.wav">
-      <Filter>TheGriller</Filter>
+      <Filter>TheGriller\Assets</Filter>
     </None>
     <None Include="..\..\..\..\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt">
       <Filter>JUCE Modules\juce_audio_devices\native\oboe</Filter>

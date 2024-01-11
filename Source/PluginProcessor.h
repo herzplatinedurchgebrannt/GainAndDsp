@@ -57,7 +57,6 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     void updateParams();
-
     void updateFilter();
 
     juce::AudioProcessorValueTreeState valueTree;

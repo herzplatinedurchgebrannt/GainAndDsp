@@ -54,8 +54,11 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> toneValueAttachement;
 
     //cabinet
-    juce::TextButton cabSwitch;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> cabAttachement;
+    juce::TextButton cabBypass;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> cabBypassAttachement;
+
+    juce::TextButton cabSelect;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> cabSelectAttachement;
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.

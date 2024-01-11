@@ -217,9 +217,15 @@ void GainAndDspAudioProcessor::updateParams()
     float toneBandGainInDb = 1.54 * tone - 10;
     toneControlEqProcessor.setBandGain(juce::Decibels::decibelsToGain(toneBandGainInDb));
 
-    auto cabBool = valueTree.getRawParameterValue("CAB_ACTIVE");
-    bool cabIsActive = cabBool->load();
+    //cabinet
+    auto cabBypassValue = valueTree.getRawParameterValue("CAB_ACTIVE");
+    bool cabIsActive = cabBypassValue->load();
     irProcessor.setBypass(!cabIsActive);
+
+    auto cabSelectValue = valueTree.getRawParameterValue("CAB_SELECT");
+    bool cabOneSelected = cabSelectValue->load();
+    irProcessor.setSelection(cabOneSelected);
+
 }
 
 //==============================================================================
@@ -279,6 +285,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GainAndDspAudioProcessor::cr
     params.push_back(std::make_unique<juce::AudioParameterFloat>("TONE_VALUE", "ToneValue", 0.0f, 10.0f, 0.1f));
 
     params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_ACTIVE", "CabActive", true));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_SELECT", "CabSelect", true));
 
     return { params.begin(), params.end() };
 }

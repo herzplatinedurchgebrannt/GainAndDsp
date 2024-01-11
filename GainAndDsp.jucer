@@ -25,9 +25,11 @@
       <FILE id="Jma6rS" name="IRProcessor.cpp" compile="1" resource="0" file="Source/IRProcessor.cpp"/>
       <FILE id="kBWHiX" name="IRProcessor.h" compile="0" resource="0" file="Source/IRProcessor.h"/>
     </GROUP>
-    <FILE id="o6LQr4" name="cabsim.wav" compile="0" resource="1" file="Source/Assets/cabsim.wav"/>
-    <FILE id="xuJd5Q" name="cabsim_2.wav" compile="0" resource="1" file="Source/Assets/cabsim_2.wav"/>
-    <FILE id="gDyER5" name="cabsim_3.wav" compile="0" resource="1" file="Source/Assets/cabsim_3.wav"/>
+    <GROUP id="{0EDA2B32-E1DC-98FC-283B-F5095786FB6B}" name="Assets">
+      <FILE id="o6LQr4" name="cabsim.wav" compile="0" resource="1" file="Source/Assets/cabsim.wav"/>
+      <FILE id="xuJd5Q" name="cabsim_2.wav" compile="0" resource="1" file="Source/Assets/cabsim_2.wav"/>
+      <FILE id="gDyER5" name="cabsim_3.wav" compile="0" resource="1" file="Source/Assets/cabsim_3.wav"/>
+    </GROUP>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
