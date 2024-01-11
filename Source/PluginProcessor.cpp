@@ -21,7 +21,6 @@ GainAndDspAudioProcessor::GainAndDspAudioProcessor()
                      #endif
                        ),
                     valueTree(*this, nullptr, "Parameters", createParameters()),
-                    //lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 20000.0f, 0.1f))
                     lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeHighPass(44100, 100, 0.1f))
 #endif
 {
@@ -120,8 +119,8 @@ void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     lowPassFilter.reset();
     lowPassFilter.prepare(spec);
 
-    cabConvolutionProcessor.reset();
-    cabConvolutionProcessor.prepare(spec);
+    irProcessor.reset();
+    irProcessor.prepare(spec);
 }
 
 void GainAndDspAudioProcessor::releaseResources()
@@ -178,7 +177,6 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-
     //filter processing
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context = juce::dsp::ProcessContextReplacing<float>(block);
@@ -190,7 +188,8 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     distortionProcessor.process(context);
     toneControlEqProcessor.process(context);
 
-    cabConvolutionProcessor.process(context);
+    context.isBypassed = true;
+    irProcessor.process(context);
 }
 
 
@@ -217,6 +216,10 @@ void GainAndDspAudioProcessor::updateParams()
     // Line equation for f(0) = -10 and f(10) = 5.4 (empirically tested values that sound good)
     float toneBandGainInDb = 1.54 * tone - 10;
     toneControlEqProcessor.setBandGain(juce::Decibels::decibelsToGain(toneBandGainInDb));
+
+    auto cabBool = valueTree.getRawParameterValue("CAB_ACTIVE");
+    bool cabIsActive = cabBool->load();
+    irProcessor.setBypass(!cabIsActive);
 }
 
 //==============================================================================
@@ -274,6 +277,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout GainAndDspAudioProcessor::cr
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_VOLUME", "GainVolume", 0.f, 3.f, 0.0001));
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>("TONE_VALUE", "ToneValue", 0.0f, 10.0f, 0.1f));
+
+    params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_ACTIVE", "CabActive", true));
 
     return { params.begin(), params.end() };
 }

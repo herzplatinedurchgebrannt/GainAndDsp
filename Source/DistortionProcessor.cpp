@@ -64,8 +64,6 @@ float DistortionAudioProcessor::processSample(float sample)
     output = (((((2.f / juce::float_Pi) * atan(output)) * _blend) + (cleanSig * (1.f - _blend))) / 2.f) * _volume;
 
     return output;
-
-    //return x / (std::abs(x) + 1);
 }
 
 void DistortionAudioProcessor::setValues(float drive, float range, float blend, float volume)

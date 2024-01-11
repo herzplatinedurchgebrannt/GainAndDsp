@@ -11,8 +11,14 @@ namespace BinaryData
     extern const char*   cabsim_wav;
     const int            cabsim_wavSize = 52768;
 
+    extern const char*   cabsim_2_wav;
+    const int            cabsim_2_wavSize = 52744;
+
+    extern const char*   cabsim_3_wav;
+    const int            cabsim_3_wavSize = 47278;
+
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 1;
+    const int namedResourceListSize = 3;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

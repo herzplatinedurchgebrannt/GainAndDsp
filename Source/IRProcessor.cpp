@@ -1,9 +1,9 @@
 #include <JuceHeader.h>
 
 using namespace juce::dsp;
-#include "CabConvolutionProcessor.h"
+#include "IRProcessor.h"
 
-void CabConvolutionProcessor::prepare(const ProcessSpec& spec)
+void IRProcessor::prepare(const ProcessSpec& spec)
 {
     sampleRate = spec.sampleRate;
     gain.setGainDecibels(6);
@@ -38,14 +38,19 @@ void CabConvolutionProcessor::prepare(const ProcessSpec& spec)
         });
 }
 
-void CabConvolutionProcessor::process(ProcessContextReplacing<float> context)
+void IRProcessor::process(ProcessContextReplacing<float> context)
 {
     context.isBypassed = bypass;
     convolution.process(context);
     gain.process(context);
 }
 
-void CabConvolutionProcessor::reset()
+void IRProcessor::reset()
 {
     convolution.reset();
+}
+
+void IRProcessor::setBypass(bool bypassValue) {
+    bypass = bypassValue;
+
 }

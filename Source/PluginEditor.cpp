@@ -15,6 +15,23 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
 {
     setSize(700, 400);
 
+    //filter
+    filterCutoffDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    filterCutoffDial.setRange(20.0f, 500.0f);
+    filterCutoffDial.setValue(100);
+    filterCutoffDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    filterCutoffDial.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&filterCutoffDial);
+    filterCutoffAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_CUTOFF", filterCutoffDial);
+
+    filterResDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    filterResDial.setRange(0.1f, 1.0f);
+    filterResDial.setValue(2.0f);
+    filterResDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    filterResDial.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&filterResDial);
+    filterResAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_RES", filterResDial);
+
     //distortion
     driveKnob.setSliderStyle(juce::Slider::Rotary);
     driveKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
@@ -40,24 +57,6 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     addAndMakeVisible(&volumeKnob);
     volumeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_VOLUME", volumeKnob);
 
-    //filter
-    filterCutoffDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    filterCutoffDial.setRange(20.0f, 500.0f);
-    filterCutoffDial.setValue(100);
-    filterCutoffDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-    filterCutoffDial.setPopupDisplayEnabled(true, true, this);
-    addAndMakeVisible(&filterCutoffDial);
-    filterCutoffAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_CUTOFF", filterCutoffDial);
-
-    filterResDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    filterResDial.setRange(0.1f, 1.0f);
-    filterResDial.setValue(2.0f);
-    filterResDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-    filterResDial.setPopupDisplayEnabled(true, true, this);
-    addAndMakeVisible(&filterResDial);
-    filterResAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_RES", filterResDial);
-
-
     //tone
     toneSlider.setSliderStyle(juce::Slider::Rotary);
     toneSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
@@ -65,6 +64,15 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     addAndMakeVisible(&toneSlider);
     toneValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "TONE_VALUE", toneSlider);
 
+    //cabinet
+    cabSwitch.setButtonText("Cabinet");
+    cabSwitch.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey);
+    cabSwitch.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::mintcream);
+    cabSwitch.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::black);
+    cabSwitch.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
+    cabSwitch.setClickingTogglesState(true);
+    addAndMakeVisible(cabSwitch);
+    cabAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.valueTree, "CAB_ACTIVE", cabSwitch);
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -107,7 +115,7 @@ void GainAndDspAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawText("Cutoff",    ((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
     g.drawText("Resonance", ((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
 
-    g.drawText("Tone", ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 205, 100, 100, juce::Justification::centred, false);
+    g.drawText("Tone", ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
 
 
 }
@@ -119,6 +127,7 @@ void GainAndDspAudioProcessorEditor::resized()
     juce::Rectangle<int> areaTop = getLocalBounds().reduced(40);
     juce::Rectangle<int> areaBottom = getLocalBounds().reduced(40);
 
+
     //distortionm
     driveKnob.setBounds( ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
     rangeKnob.setBounds( ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
@@ -129,7 +138,8 @@ void GainAndDspAudioProcessorEditor::resized()
     filterCutoffDial.setBounds(((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
     filterResDial.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
 
-    toneSlider.setBounds(((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) +  150, 100, 100);
+    toneSlider.setBounds(((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) +  125, 100, 100);
+    cabSwitch.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 125, 100, 30);
 
 
 }

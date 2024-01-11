@@ -631,7 +631,7 @@
     <ClCompile Include="..\..\Source\DistortionProcessor.cpp">
       <Filter>TheGriller\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CabConvolutionProcessor.cpp">
+    <ClCompile Include="..\..\Source\IRProcessor.cpp">
       <Filter>TheGriller\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
@@ -3192,7 +3192,7 @@
     <ClInclude Include="..\..\Source\DistortionProcessor.h">
       <Filter>TheGriller\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CabConvolutionProcessor.h">
+    <ClInclude Include="..\..\Source\IRProcessor.h">
       <Filter>TheGriller\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
@@ -6195,6 +6195,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Source\Assets\cabsim.wav">
+      <Filter>TheGriller</Filter>
+    </None>
+    <None Include="..\..\Source\Assets\cabsim_2.wav">
+      <Filter>TheGriller</Filter>
+    </None>
+    <None Include="..\..\Source\Assets\cabsim_3.wav">
       <Filter>TheGriller</Filter>
     </None>
     <None Include="..\..\..\..\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt">

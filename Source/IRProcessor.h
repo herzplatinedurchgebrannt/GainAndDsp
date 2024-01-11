@@ -4,7 +4,7 @@
 
 using namespace juce::dsp;
 
-class CabConvolutionProcessor
+class IRProcessor
 {
 public:
     struct BufferWithSampleRate
@@ -54,6 +54,8 @@ public:
     void process(ProcessContextReplacing<float> context);
 
     void reset();
+
+    void setBypass(bool bypassValue);
 
     void updateParameters();
 

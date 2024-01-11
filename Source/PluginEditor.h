@@ -28,9 +28,15 @@ private:
 
     juce::Image background;
 
-
     int slRow = 7;
     int slCol = 4;
+
+    //filter
+    juce::Slider filterCutoffDial;
+    juce::Slider filterResDial;
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterCutoffAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterResAttachment;
 
     //distortion
     juce::Slider driveKnob;
@@ -43,17 +49,13 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> blendAttachement;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> volumeAttachement;
 
-    //filter
-    juce::Slider filterCutoffDial;
-    juce::Slider filterResDial;
-
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterCutoffAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterResAttachment;
-
     //tone
     juce::Slider toneSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> toneValueAttachement;
 
+    //cabinet
+    juce::TextButton cabSwitch;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> cabAttachement;
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.

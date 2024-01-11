@@ -22,12 +22,12 @@
             file="Source/DistortionProcessor.cpp"/>
       <FILE id="HLoU4G" name="DistortionProcessor.h" compile="0" resource="0"
             file="Source/DistortionProcessor.h"/>
-      <FILE id="Jma6rS" name="CabConvolutionProcessor.cpp" compile="1" resource="0"
-            file="Source/CabConvolutionProcessor.cpp"/>
-      <FILE id="kBWHiX" name="CabConvolutionProcessor.h" compile="0" resource="0"
-            file="Source/CabConvolutionProcessor.h"/>
+      <FILE id="Jma6rS" name="IRProcessor.cpp" compile="1" resource="0" file="Source/IRProcessor.cpp"/>
+      <FILE id="kBWHiX" name="IRProcessor.h" compile="0" resource="0" file="Source/IRProcessor.h"/>
     </GROUP>
     <FILE id="o6LQr4" name="cabsim.wav" compile="0" resource="1" file="Source/Assets/cabsim.wav"/>
+    <FILE id="xuJd5Q" name="cabsim_2.wav" compile="0" resource="1" file="Source/Assets/cabsim_2.wav"/>
+    <FILE id="gDyER5" name="cabsim_3.wav" compile="0" resource="1" file="Source/Assets/cabsim_3.wav"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
