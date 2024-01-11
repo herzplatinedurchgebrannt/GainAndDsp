@@ -224,8 +224,12 @@ void GainAndDspAudioProcessor::updateParams()
 
     auto cabSelectValue = valueTree.getRawParameterValue("CAB_SELECT");
     bool cabOneSelected = cabSelectValue->load();
-    irProcessor.setSelection(cabOneSelected);
 
+    if (cabOneSelected != cabSelectValueOld) 
+    {
+        irProcessor.setSelection(cabOneSelected);
+        cabSelectValueOld = cabOneSelected;
+    }
 }
 
 //==============================================================================
