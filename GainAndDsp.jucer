@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="ZLCph3" name="GainAndDsp" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
-  <MAINGROUP id="p3hTYu" name="GainAndDsp">
+<JUCERPROJECT id="ZLCph3" name="TheGriller" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              companyName="herzplatine.dsp" companyEmail="alexandermathieu@googlemail.com"
+              companyWebsite="https://github.com/herzplatinedurchgebrannt"
+              pluginVST3Category="Distortion">
+  <MAINGROUP id="p3hTYu" name="TheGriller">
     <GROUP id="{8EA04C08-550E-354E-39EB-289620D18BC9}" name="Source">
+      <FILE id="Rmt2SK" name="EqProcessor.cpp" compile="1" resource="0" file="Source/EqProcessor.cpp"/>
+      <FILE id="trOnPZ" name="EqProcessor.h" compile="0" resource="0" file="Source/EqProcessor.h"/>
+      <FILE id="Jr9rNy" name="DynamicWaveshaper.cpp" compile="1" resource="0"
+            file="Source/DynamicWaveshaper.cpp"/>
+      <FILE id="K5kLMO" name="DynamicWaveshaper.h" compile="0" resource="0"
+            file="Source/DynamicWaveshaper.h"/>
+      <FILE id="gkUlAP" name="EnvelopeFollower.cpp" compile="1" resource="0"
+            file="Source/EnvelopeFollower.cpp"/>
+      <FILE id="rSXFbz" name="EnvelopeFollower.h" compile="0" resource="0"
+            file="Source/EnvelopeFollower.h"/>
       <FILE id="JCtqCh" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Iajgfw" name="PluginProcessor.h" compile="0" resource="0"
@@ -11,6 +24,21 @@
       <FILE id="JCeJKI" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="jEb1mT" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="acCgDq" name="SingleEqBandProcessor.cpp" compile="1" resource="0"
+            file="Source/SingleEqBandProcessor.cpp"/>
+      <FILE id="swTZHf" name="SingleEqBandProcessor.h" compile="0" resource="0"
+            file="Source/SingleEqBandProcessor.h"/>
+      <FILE id="OTxgEU" name="DistortionProcessor.cpp" compile="1" resource="0"
+            file="Source/DistortionProcessor.cpp"/>
+      <FILE id="HLoU4G" name="DistortionProcessor.h" compile="0" resource="0"
+            file="Source/DistortionProcessor.h"/>
+      <FILE id="Jma6rS" name="IRProcessor.cpp" compile="1" resource="0" file="Source/IRProcessor.cpp"/>
+      <FILE id="kBWHiX" name="IRProcessor.h" compile="0" resource="0" file="Source/IRProcessor.h"/>
+    </GROUP>
+    <GROUP id="{0EDA2B32-E1DC-98FC-283B-F5095786FB6B}" name="Assets">
+      <FILE id="o6LQr4" name="cabsim.wav" compile="0" resource="1" file="Source/Assets/cabsim.wav"/>
+      <FILE id="xuJd5Q" name="cabsim_2.wav" compile="0" resource="1" file="Source/Assets/cabsim_2.wav"/>
+      <FILE id="gDyER5" name="cabsim_3.wav" compile="0" resource="1" file="Source/Assets/cabsim_3.wav"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

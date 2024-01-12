@@ -14,11 +14,11 @@
 //==============================================================================
 /**
 */
-class GainAndDspAudioProcessorEditor  : public juce::AudioProcessorEditor
+class TheGrillerAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    GainAndDspAudioProcessorEditor (GainAndDspAudioProcessor&);
-    ~GainAndDspAudioProcessorEditor() override;
+    TheGrillerAudioProcessorEditor (TheGrillerAudioProcessor&);
+    ~TheGrillerAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -26,39 +26,47 @@ public:
 
 private:
 
-    //distortion
-    //juce::ScopedPointer<juce::Slider> driveKnob;
-    //juce::ScopedPointer<juce::Slider> rangeKnob;
-    //juce::ScopedPointer<juce::Slider> blendKnob;
-    //juce::ScopedPointer<juce::Slider> volumeKnob;
+    juce::Image background;
 
-    //juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> driveAttachement;
-    //juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> rangeAttachement;
-    //juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> blendAttachement;
-    //juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> volumeAttachement;
-
-
-    juce::Slider driveKnob;
-    juce::Slider rangeKnob;
-    juce::Slider blendKnob;
-    juce::Slider volumeKnob;
-
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> driveAttachement;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> rangeAttachement;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> blendAttachement;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> volumeAttachement;
-
+    int slRow = 7;
+    int slCol = 4;
 
     //filter
     juce::Slider filterCutoffDial;
-    juce::Slider filterResDial;
-
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterCutoffAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> filterResAttachment;
 
+    //distortion
+    juce::Slider driveKnob;
+    juce::Slider rangeKnob;
+    juce::Slider volumeKnob;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> driveAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> rangeAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> volumeAttachement;
+
+    //eq
+    juce::Slider eqBassKnob;
+    juce::Slider eqMidKnob;
+    juce::Slider eqTrebleKnob;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> eqBassAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> eqMidAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> eqTrebleAttachement;
+
+    //cabinet
+    juce::TextButton cabBypass;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> cabBypassAttachement;
+    juce::ComboBox cabComboBox;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> cabComboBoxAttachement;
+
+    //tone
+    juce::Slider toneSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> toneValueAttachement;
+
+    //output 
+    juce::Slider outputSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> outputValueAttachement;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    GainAndDspAudioProcessor& audioProcessor;
+    TheGrillerAudioProcessor& audioProcessor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainAndDspAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TheGrillerAudioProcessorEditor)
 };

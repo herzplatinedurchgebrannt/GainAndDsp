@@ -10,128 +10,164 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioProcessor& p)
+TheGrillerAudioProcessorEditor::TheGrillerAudioProcessorEditor (TheGrillerAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
     setSize(700, 400);
 
+    //filter
+    filterCutoffDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    filterCutoffDial.setRange(20.0f, 500.0f);
+    filterCutoffDial.setValue(100);
+    filterCutoffDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    filterCutoffDial.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&filterCutoffDial);
+    filterCutoffAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_CUTOFF", filterCutoffDial);
+
     //distortion
-    //addAndMakeVisible(driveKnob = new juce::Slider("Drive"));
-    //driveKnob->setSliderStyle(juce::Slider::Rotary);
-    //driveKnob->setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-
-    //addAndMakeVisible(rangeKnob = new juce::Slider("Range"));
-    //rangeKnob->setSliderStyle(juce::Slider::Rotary);
-    //rangeKnob->setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-
-    //addAndMakeVisible(blendKnob = new juce::Slider("Blend"));
-    //blendKnob->setSliderStyle(juce::Slider::Rotary);
-    //blendKnob->setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-
-    //addAndMakeVisible(volumeKnob = new juce::Slider("Volume"));
-    //volumeKnob->setSliderStyle(juce::Slider::Rotary);
-    //volumeKnob->setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-
-    //driveAttachement = new juce::AudioProcessorValueTreeState::SliderAttachment(p.getState(), "drive", *driveKnob);
-    //rangeAttachement = new juce::AudioProcessorValueTreeState::SliderAttachment(p.getState(), "range", *rangeKnob);
-    //blendAttachement = new juce::AudioProcessorValueTreeState::SliderAttachment(p.getState(), "blend", *blendKnob);
-    //volumeAttachement = new juce::AudioProcessorValueTreeState::SliderAttachment(p.getState(), "volume", *volumeKnob);
-
-
     driveKnob.setSliderStyle(juce::Slider::Rotary);
     driveKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    driveKnob.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&driveKnob);
     driveAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_DRIVE", driveKnob);
 
     rangeKnob.setSliderStyle(juce::Slider::Rotary);
     rangeKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    rangeKnob.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&rangeKnob);
     rangeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_RANGE", rangeKnob);
 
-    blendKnob.setSliderStyle(juce::Slider::Rotary);
-    blendKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-    addAndMakeVisible(&blendKnob);
-    blendAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_BLEND", blendKnob);
-
     volumeKnob.setSliderStyle(juce::Slider::Rotary);
     volumeKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    volumeKnob.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&volumeKnob);
     volumeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_VOLUME", volumeKnob);
 
+    //eq
+    eqBassKnob.setSliderStyle(juce::Slider::Rotary);
+    eqBassKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    eqBassKnob.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&eqBassKnob);
+    eqBassAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "EQ_BASS", eqBassKnob);
 
-    //filter
-    filterCutoffDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    filterCutoffDial.setRange(20.0f, 20000.0f);
-    filterCutoffDial.setValue(600.0f);
-    filterCutoffDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    filterCutoffDial.setPopupDisplayEnabled(true, true, this);
-    filterCutoffDial.setSkewFactorFromMidPoint(1000.0f);
-    addAndMakeVisible(&filterCutoffDial);
-    filterCutoffAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_CUTOFF", filterCutoffDial);
+    eqMidKnob.setSliderStyle(juce::Slider::Rotary);
+    eqMidKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    eqMidKnob.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&eqMidKnob);
+    eqMidAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "EQ_MID", eqMidKnob);
 
+    eqTrebleKnob.setSliderStyle(juce::Slider::Rotary);
+    eqTrebleKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    eqTrebleKnob.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&eqTrebleKnob);
+    eqTrebleAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "EQ_HIGH", eqTrebleKnob);
 
-    filterResDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    filterResDial.setRange(0.1f, 1.0f);
-    filterResDial.setValue(2.0f);
-    filterResDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    filterResDial.setPopupDisplayEnabled(true, true, this);
-    addAndMakeVisible(&filterResDial);
-    filterResAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_RES", filterResDial);
+    //cabinet
+    cabBypass.setButtonText("Bypass");
+    cabBypass.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey);
+    cabBypass.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::mintcream);
+    cabBypass.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::black);
+    cabBypass.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
+    cabBypass.setClickingTogglesState(true);
+    addAndMakeVisible(cabBypass);
+    cabBypassAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.valueTree, "CAB_ACTIVE", cabBypass);
 
+    cabComboBox.addItem("Cab 1", 1);
+    cabComboBox.addItem("Cab 2", 2);
+    cabComboBox.addItem("Cab 3", 3);
+    addAndMakeVisible(cabComboBox);
+    cabComboBoxAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.valueTree, "CAB_BOX_SELECT", cabComboBox);
 
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    //tone
+    toneSlider.setSliderStyle(juce::Slider::Rotary);
+    toneSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    toneSlider.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&toneSlider);
+    toneValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "TONE_VALUE", toneSlider);
+
+    //output
+    outputSlider.setSliderStyle(juce::Slider::Rotary);
+    outputSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    outputSlider.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&outputSlider);
+    outputValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "OUTPUT_VALUE", outputSlider);
 }
 
-GainAndDspAudioProcessorEditor::~GainAndDspAudioProcessorEditor()
+TheGrillerAudioProcessorEditor::~TheGrillerAudioProcessorEditor()
 {
 }
 
 //==============================================================================
-void GainAndDspAudioProcessorEditor::paint (juce::Graphics& g)
+void TheGrillerAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+    //g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 
-    g.setColour(juce::Colours::white);
+    //background = juce::ImageCache::getFromMemory(BinaryData::rust_png, BinaryData::rust_pngSize);
+    //g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
+
+    g.fillAll(juce::Colours::mintcream);
+    
+    g.setColour(juce::Colours::black);
+    juce::Rectangle <float> areaAmp(25, 25, 450, 150);
+    g.drawRoundedRectangle(areaAmp, 20.0f, 2.0f);
+
+    juce::Rectangle <float> areaCab(500, 25, 175, 150);
+    g.drawRoundedRectangle(areaCab, 20.0f, 2.0f);
+
+    juce::Rectangle <float> areaTone(25, 200, 650, 150);
+    g.drawRoundedRectangle(areaTone, 20.0f, 2.0f);
+
+    g.setColour(juce::Colours::black);
     g.setFont(15.0f);
-
-    //distortion
-    g.drawText("Drive", ((getWidth() / 5) * 1) - (100 / 2), (getHeight() / 2) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Range", ((getWidth() / 5) * 2) - (100 / 2), (getHeight() / 2) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Blend", ((getWidth() / 5) * 3) - (100 / 2), (getHeight() / 2) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Volume", ((getWidth() / 5) * 4) - (100 / 2), (getHeight() / 2) + 5, 100, 100, juce::Justification::centred, false);
+    juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
+    g.drawText("GUITAR AMP", titleArea, juce::Justification::centredTop);
 
     //filter
-    juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
-    g.drawText("IIR Low Pass Filter", titleArea, juce::Justification::centredTop);
-    g.drawText("Cutoff", 46, 70, 50, 25, juce::Justification::centredLeft);
-    g.drawText("Resonance", 107, 70, 70, 25, juce::Justification::centredLeft);
+    g.drawText("Cutoff",    ((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
 
-    juce::Rectangle <float> area(25, 25, 150, 150);
+    //distortion
+    g.drawText("Drive",     ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Range",     ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Volume",    ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
 
-    g.setColour(juce::Colours::yellow);
-    g.drawRoundedRectangle(area, 20.0f, 2.0f);
+    //eq
+    g.drawText("Bass",      ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Mid",       ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Treble",    ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
 
-
+    //tone
+    g.drawText("Tone",      ((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    
+    g.drawText("Output",    ((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
 }
 
-void GainAndDspAudioProcessorEditor::resized()
+void TheGrillerAudioProcessorEditor::resized()
+
 {
-    //driveKnob->setBounds(((getWidth() / 5) * 1) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
-    //rangeKnob->setBounds(((getWidth() / 5) * 2) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
-    //blendKnob->setBounds(((getWidth() / 5) * 3) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
-    //volumeKnob->setBounds(((getWidth() / 5) * 4) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
+    juce::Rectangle<int> areaTop = getLocalBounds().reduced(40);
+    juce::Rectangle<int> areaBottom = getLocalBounds().reduced(40);
 
-    driveKnob.setBounds(((getWidth() / 5) * 1) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
-    rangeKnob.setBounds(((getWidth() / 5) * 2) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
-    blendKnob.setBounds(((getWidth() / 5) * 3) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
-    volumeKnob.setBounds(((getWidth() / 5) * 4) - (100 / 2), (getHeight() / 2) - (100 / 2), 100, 100);
+    //filter
+    filterCutoffDial.setBounds(((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
 
+    //distortion
+    driveKnob.setBounds( ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
+    rangeKnob.setBounds( ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
+    volumeKnob.setBounds(((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
 
-    //need to come back and dynamically set these...ok for now
-    juce::Rectangle<int> area = getLocalBounds().reduced(40);
+    //eq
+    eqBassKnob.setBounds(((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+    eqMidKnob.setBounds(((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+    eqTrebleKnob.setBounds(((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
 
-    filterCutoffDial.setBounds(30, 90, 70, 70);
-    filterResDial.setBounds(100, 90, 70, 70);
+    //cabinet
+    cabBypass.setBounds(((getWidth() / slRow) * 6) - (100 / 2) - 10, (getHeight() / slCol) - (100 / 2), 100, 30);
+    cabComboBox.setBounds(((getWidth() / slRow) * 6) - (100 / 2) - 10, (getHeight() / slCol) - (100 / 2) + 50, 100, 30);
+
+    //tone 
+    toneSlider.setBounds(((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+
+    //output 
+    outputSlider.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
 }

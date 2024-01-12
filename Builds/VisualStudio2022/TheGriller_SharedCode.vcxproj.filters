@@ -2,11 +2,14 @@
 
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="GainAndDsp\Source">
-      <UniqueIdentifier>{58B5B49F-AA8A-AD87-21DC-FDF1B1E2D10B}</UniqueIdentifier>
+    <Filter Include="TheGriller\Source">
+      <UniqueIdentifier>{FE3F44D6-1CB5-F93A-7EDA-1C229DC4388F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GainAndDsp">
-      <UniqueIdentifier>{5B01EE57-A3D8-34D5-66BC-11F51720F95C}</UniqueIdentifier>
+    <Filter Include="TheGriller\Assets">
+      <UniqueIdentifier>{C84B6D75-0E9C-81F0-74C4-ABFC835BC364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TheGriller">
+      <UniqueIdentifier>{E71B59E4-0CE4-ACE9-AF10-DCFD56F6BA94}</UniqueIdentifier>
     </Filter>
     <Filter Include="JUCE Modules\juce_audio_basics\audio_play_head">
       <UniqueIdentifier>{EB58F05A-A968-CEBE-40C4-107CDD8F240F}</UniqueIdentifier>
@@ -619,14 +622,29 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\EqProcessor.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\DynamicWaveshaper.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\EnvelopeFollower.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
-      <Filter>GainAndDsp\Source</Filter>
+      <Filter>TheGriller\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\PluginEditor.cpp">
-      <Filter>GainAndDsp\Source</Filter>
+      <Filter>TheGriller\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\SingleEqBandProcessor.cpp">
-      <Filter>GainAndDsp\Source</Filter>
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\DistortionProcessor.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\IRProcessor.cpp">
+      <Filter>TheGriller\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
@@ -3124,6 +3142,9 @@
     <ClCompile Include="..\..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.mm">
       <Filter>JUCE Modules\juce_gui_extra</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
+      <Filter>JUCE Library Code</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_basics.cpp">
       <Filter>JUCE Library Code</Filter>
     </ClCompile>
@@ -3171,14 +3192,29 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\EqProcessor.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\DynamicWaveshaper.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\EnvelopeFollower.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
-      <Filter>GainAndDsp\Source</Filter>
+      <Filter>TheGriller\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginEditor.h">
-      <Filter>GainAndDsp\Source</Filter>
+      <Filter>TheGriller\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\SingleEqBandProcessor.h">
-      <Filter>GainAndDsp\Source</Filter>
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\DistortionProcessor.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\IRProcessor.h">
+      <Filter>TheGriller\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
@@ -6168,6 +6204,9 @@
     <ClInclude Include="..\..\..\..\JUCE\modules\juce_gui_extra\juce_gui_extra.h">
       <Filter>JUCE Modules\juce_gui_extra</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h">
+      <Filter>JUCE Library Code</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>JUCE Library Code</Filter>
     </ClInclude>
@@ -6176,6 +6215,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Source\Assets\cabsim.wav">
+      <Filter>TheGriller\Assets</Filter>
+    </None>
+    <None Include="..\..\Source\Assets\cabsim_2.wav">
+      <Filter>TheGriller\Assets</Filter>
+    </None>
+    <None Include="..\..\Source\Assets\cabsim_3.wav">
+      <Filter>TheGriller\Assets</Filter>
+    </None>
     <None Include="..\..\..\..\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt">
       <Filter>JUCE Modules\juce_audio_devices\native\oboe</Filter>
     </None>

@@ -9,16 +9,21 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DynamicWaveshaper.h"
+#include "SingleEqBandProcessor.h"
+#include "DistortionProcessor.h"
+#include "EqProcessor.h"
+#include "IRProcessor.h"
 
 //==============================================================================
 /**
 */
-class GainAndDspAudioProcessor  : public juce::AudioProcessor
+class TheGrillerAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    GainAndDspAudioProcessor();
-    ~GainAndDspAudioProcessor() override;
+    TheGrillerAudioProcessor();
+    ~TheGrillerAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -53,9 +58,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    juce::AudioProcessorValueTreeState& getState();
-
-    void updateFilter();
+    void updateParams();
 
     juce::AudioProcessorValueTreeState valueTree;
 
@@ -63,12 +66,23 @@ public:
 
 private:
 
-    juce::ScopedPointer<juce::AudioProcessorValueTreeState> state;
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> highPassFilter;
 
-    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> lowPassFilter;
+    DistortionAudioProcessor distortionProcessor;
+    DynamicWaveshaper dynamicWaveshaper;
+    EqProcessor eqProcessor;
+    IRProcessor irProcessor;
+    
+    float eqBassOldValue = 0.f;
+    float eqMidOldValue = 0.f;
+    float eqHighOldValue = 0.f;
+    int cabBoxSelectOldValue = 1;
+
+    SingleEqBandProcessor toneControlEqProcessor;
+    Gain<float> outputLevelProcessor;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainAndDspAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TheGrillerAudioProcessor)
 };
