@@ -7,6 +7,26 @@
               pluginVST3Category="Distortion">
   <MAINGROUP id="p3hTYu" name="TheGriller">
     <GROUP id="{8EA04C08-550E-354E-39EB-289620D18BC9}" name="Source">
+      <FILE id="yy5KgE" name="BaseWaveshaper.cpp" compile="1" resource="0"
+            file="Source/BaseWaveshaper.cpp"/>
+      <FILE id="JFDjBy" name="BaseWaveshaper.h" compile="0" resource="0"
+            file="Source/BaseWaveshaper.h"/>
+      <FILE id="gVZxiP" name="ParametricWaveshaper.cpp" compile="1" resource="0"
+            file="Source/ParametricWaveshaper.cpp"/>
+      <FILE id="qzlG4Y" name="ParametricWaveshaper.h" compile="0" resource="0"
+            file="Source/ParametricWaveshaper.h"/>
+      <FILE id="Jr9rNy" name="DynamicWaveshaper.cpp" compile="1" resource="0"
+            file="Source/DynamicWaveshaper.cpp"/>
+      <FILE id="K5kLMO" name="DynamicWaveshaper.h" compile="0" resource="0"
+            file="Source/DynamicWaveshaper.h"/>
+      <FILE id="gkUlAP" name="EnvelopeFollower.cpp" compile="1" resource="0"
+            file="Source/EnvelopeFollower.cpp"/>
+      <FILE id="rSXFbz" name="EnvelopeFollower.h" compile="0" resource="0"
+            file="Source/EnvelopeFollower.h"/>
+      <FILE id="kLzIW2" name="SlewRateLimiter.cpp" compile="1" resource="0"
+            file="Source/SlewRateLimiter.cpp"/>
+      <FILE id="SXO0ZL" name="SlewRateLimiter.h" compile="0" resource="0"
+            file="Source/SlewRateLimiter.h"/>
       <FILE id="JCtqCh" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Iajgfw" name="PluginProcessor.h" compile="0" resource="0"

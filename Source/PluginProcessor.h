@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DynamicWaveshaper.h"
 #include "SingleEqBandProcessor.h"
 #include "DistortionProcessor.h"
 #include "IRProcessor.h"
@@ -65,10 +66,12 @@ public:
 
 private:
 
-    SingleEqBandProcessor toneControlEqProcessor;
-    DistortionAudioProcessor distortionProcessor;
-
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> lowPassFilter;
+
+    DistortionAudioProcessor distortionProcessor;
+    DynamicWaveshaper dynamicWaveshaper;
+
+    SingleEqBandProcessor toneControlEqProcessor;
 
     IRProcessor irProcessor;
 

@@ -105,6 +105,8 @@ void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getMainBusNumOutputChannels();
 
+    dynamicWaveshaper.prepare(spec);
+
     updateParams();
 
     SingleEqBandProcessor::Band toneControlEqBand(
@@ -186,6 +188,9 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
 
     updateParams();
     distortionProcessor.process(context);
+
+    dynamicWaveshaper.process(context);
+
     toneControlEqProcessor.process(context);
 
     context.isBypassed = true;

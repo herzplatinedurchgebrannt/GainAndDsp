@@ -71,7 +71,7 @@ void IRProcessor::updateParameters()
     //) };
 
     const char* currentCab;
-    int currentCabSize;;
+    int currentCabSize;
 
     switch (cabSelectId)
     {

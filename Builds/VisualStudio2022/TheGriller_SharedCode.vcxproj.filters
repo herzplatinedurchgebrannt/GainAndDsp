@@ -622,6 +622,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\BaseWaveshaper.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ParametricWaveshaper.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\DynamicWaveshaper.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\EnvelopeFollower.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\SlewRateLimiter.cpp">
+      <Filter>TheGriller\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>TheGriller\Source</Filter>
     </ClCompile>
@@ -3183,6 +3198,21 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\BaseWaveshaper.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ParametricWaveshaper.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\DynamicWaveshaper.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\EnvelopeFollower.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\SlewRateLimiter.h">
+      <Filter>TheGriller\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
       <Filter>TheGriller\Source</Filter>
     </ClInclude>
