@@ -23,10 +23,6 @@
             file="Source/EnvelopeFollower.cpp"/>
       <FILE id="rSXFbz" name="EnvelopeFollower.h" compile="0" resource="0"
             file="Source/EnvelopeFollower.h"/>
-      <FILE id="kLzIW2" name="SlewRateLimiter.cpp" compile="1" resource="0"
-            file="Source/SlewRateLimiter.cpp"/>
-      <FILE id="SXO0ZL" name="SlewRateLimiter.h" compile="0" resource="0"
-            file="Source/SlewRateLimiter.h"/>
       <FILE id="JCtqCh" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Iajgfw" name="PluginProcessor.h" compile="0" resource="0"

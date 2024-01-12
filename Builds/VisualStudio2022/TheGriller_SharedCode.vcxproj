@@ -143,7 +143,6 @@
     <ClCompile Include="..\..\Source\ParametricWaveshaper.cpp"/>
     <ClCompile Include="..\..\Source\DynamicWaveshaper.cpp"/>
     <ClCompile Include="..\..\Source\EnvelopeFollower.cpp"/>
-    <ClCompile Include="..\..\Source\SlewRateLimiter.cpp"/>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp"/>
     <ClCompile Include="..\..\Source\PluginEditor.cpp"/>
     <ClCompile Include="..\..\Source\SingleEqBandProcessor.cpp"/>
@@ -2526,7 +2525,6 @@
     <ClInclude Include="..\..\Source\ParametricWaveshaper.h"/>
     <ClInclude Include="..\..\Source\DynamicWaveshaper.h"/>
     <ClInclude Include="..\..\Source\EnvelopeFollower.h"/>
-    <ClInclude Include="..\..\Source\SlewRateLimiter.h"/>
     <ClInclude Include="..\..\Source\PluginProcessor.h"/>
     <ClInclude Include="..\..\Source\PluginEditor.h"/>
     <ClInclude Include="..\..\Source\SingleEqBandProcessor.h"/>

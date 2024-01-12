@@ -1,7 +1,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "SlewRateLimiter.h"
+
+#define TINY 0.0000000001
 
 /**
 
@@ -15,7 +16,7 @@ References: Udo Zoelzer - DAFX (page 84)
 
 */
 
-class EnvelopeFollower : public SlewRateLimiter
+class EnvelopeFollower /*: public SlewRateLimiter*/
 {
 
   public:
@@ -36,10 +37,18 @@ class EnvelopeFollower : public SlewRateLimiter
     /** Destructor. */
     ~EnvelopeFollower();
 
+    void setSampleRate(float newSampleRate);
+
+    void setAttackTime(float newAttackTime);
+
+    void setReleaseTime(float newReleaseTime);
+
     /** \name Setup */
 
     /** Chooses the mode for the envelope detector. @see detectorModes */
     void setMode(int newMode);
+
+    void reset();
 
     /** \name Audio Processing */
 
@@ -67,14 +76,38 @@ class EnvelopeFollower : public SlewRateLimiter
   protected:
     /** \name Data */
 
+    float y_1; // previous ouput sample of the unit
+
+    float coeffAttack, coeffRelease;
     int mode; /** @see detectorModes */
+
+
+    float sampleRate;
+    float attackTime, releaseTime; // time constants in seconds
 };
 
 // inlined functions
 
 inline float EnvelopeFollower::applySmoothing(float in)
 {
-    return SlewRateLimiter::getSample(in);
+    static float temp, coeff;
+
+    temp = in;
+
+    // decide, if signal is rising or falling and choose appropriate filter
+    // coefficient:
+    if (y_1 < temp)
+        coeff = coeffAttack;
+    else
+        coeff = coeffRelease;
+
+    // perform the envelope detection:
+    temp = (1.0f - coeff) * temp + coeff * y_1 + TINY;
+
+    // update the memorized output for next call:
+    y_1 = temp;
+
+    return temp;
 }
 
 inline float EnvelopeFollower::getSample(float in)

@@ -634,9 +634,6 @@
     <ClCompile Include="..\..\Source\EnvelopeFollower.cpp">
       <Filter>TheGriller\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\SlewRateLimiter.cpp">
-      <Filter>TheGriller\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>TheGriller\Source</Filter>
     </ClCompile>
@@ -3208,9 +3205,6 @@
       <Filter>TheGriller\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\EnvelopeFollower.h">
-      <Filter>TheGriller\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\SlewRateLimiter.h">
       <Filter>TheGriller\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
