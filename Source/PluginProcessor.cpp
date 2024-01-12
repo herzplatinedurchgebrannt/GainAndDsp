@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-GainAndDspAudioProcessor::GainAndDspAudioProcessor()
+TheGrillerAudioProcessor::TheGrillerAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -21,22 +21,22 @@ GainAndDspAudioProcessor::GainAndDspAudioProcessor()
                      #endif
                        ),
                     valueTree(*this, nullptr, "Parameters", createParameters()),
-                    lowPassFilter(juce::dsp::IIR::Coefficients<float>::makeHighPass(44100, 100, 0.1f))
+                    highPassFilter(juce::dsp::IIR::Coefficients<float>::makeHighPass(44100, 100, 0.1f))
 #endif
 {
 }
 
-GainAndDspAudioProcessor::~GainAndDspAudioProcessor()
+TheGrillerAudioProcessor::~TheGrillerAudioProcessor()
 {
 }
 
 //==============================================================================
-const juce::String GainAndDspAudioProcessor::getName() const
+const juce::String TheGrillerAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool GainAndDspAudioProcessor::acceptsMidi() const
+bool TheGrillerAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -45,7 +45,7 @@ bool GainAndDspAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool GainAndDspAudioProcessor::producesMidi() const
+bool TheGrillerAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -54,7 +54,7 @@ bool GainAndDspAudioProcessor::producesMidi() const
    #endif
 }
 
-bool GainAndDspAudioProcessor::isMidiEffect() const
+bool TheGrillerAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -63,37 +63,37 @@ bool GainAndDspAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double GainAndDspAudioProcessor::getTailLengthSeconds() const
+double TheGrillerAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int GainAndDspAudioProcessor::getNumPrograms()
+int TheGrillerAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int GainAndDspAudioProcessor::getCurrentProgram()
+int TheGrillerAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void GainAndDspAudioProcessor::setCurrentProgram (int index)
+void TheGrillerAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const juce::String GainAndDspAudioProcessor::getProgramName (int index)
+const juce::String TheGrillerAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void GainAndDspAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void TheGrillerAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
 
 //==============================================================================
-void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void TheGrillerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
@@ -105,12 +105,14 @@ void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getMainBusNumOutputChannels();
 
-    lowPassFilter.reset();
-    lowPassFilter.prepare(spec);
+    highPassFilter.reset();
+    highPassFilter.prepare(spec);
 
     dynamicWaveshaper.prepare(spec);
 
     updateParams();
+
+    eqProcessor.prepare(spec);
 
     SingleEqBandProcessor::Band toneControlEqBand(
         "High",
@@ -125,9 +127,12 @@ void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 
     irProcessor.reset();
     irProcessor.prepare(spec);
+
+    outputLevelProcessor.reset();
+    outputLevelProcessor.prepare(spec);
 }
 
-void GainAndDspAudioProcessor::releaseResources()
+void TheGrillerAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
@@ -136,7 +141,7 @@ void GainAndDspAudioProcessor::releaseResources()
 
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool GainAndDspAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool TheGrillerAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
@@ -161,46 +166,45 @@ bool GainAndDspAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 }
 #endif
 
-void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void TheGrillerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-    //filter processing
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context = juce::dsp::ProcessContextReplacing<float>(block);
 
     updateParams();
-    lowPassFilter.process(context);
-
+    highPassFilter.process(context);
     distortionProcessor.process(context);
-
     dynamicWaveshaper.process(context);
+    eqProcessor.process(context);
+
+    //context.isBypassed = true;
+    irProcessor.process(context);
 
     toneControlEqProcessor.process(context);
 
-    eqProcessor.process(context);
-
-    context.isBypassed = true;
-    irProcessor.process(context);
+    outputLevelProcessor.process(context);
 }
 
 
-void GainAndDspAudioProcessor::updateParams()
+void TheGrillerAudioProcessor::updateParams()
 {
     //highpass filter
     auto filterCutoffValue = valueTree.getRawParameterValue("FILTER_CUTOFF");
     float filterCutoff = filterCutoffValue->load();
 
-    auto filterResValue = valueTree.getRawParameterValue("FILTER_RES");
-    float filterRes = filterResValue->load();
+    //auto filterResValue = valueTree.getRawParameterValue("FILTER_RES");
+    //float filterRes = filterResValue->load();
 
-    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(lastSampleRate, filterCutoff, filterRes);
+    float filterRes = 0.35;
+
+    *highPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(lastSampleRate, filterCutoff, filterRes);
 
     //distortion
     auto driveValue = valueTree.getRawParameterValue("GAIN_DRIVE");
@@ -209,8 +213,9 @@ void GainAndDspAudioProcessor::updateParams()
     auto rangeValue = valueTree.getRawParameterValue("GAIN_RANGE");
     float range = rangeValue->load();
 
-    auto blendValue = valueTree.getRawParameterValue("GAIN_BLEND");
-    float blend = blendValue->load();
+    //auto blendValue = valueTree.getRawParameterValue("GAIN_BLEND");
+    //float blend = blendValue->load();
+    float blend = 1.0f;
 
     auto volumeValue = valueTree.getRawParameterValue("GAIN_VOLUME");
     float volume = volumeValue->load();
@@ -218,17 +223,6 @@ void GainAndDspAudioProcessor::updateParams()
     distortionProcessor.setValues(drive, range, blend, volume);
 
     //eq
-    auto toneValue = valueTree.getRawParameterValue("TONE_VALUE");
-    float tone = toneValue->load();
-
-    // Line equation for f(0) = -10 and f(10) = 5.4 (empirically tested values that sound good)
-    float toneBandGainInDb = 1.54 * tone - 10;
-    toneControlEqProcessor.setBandGain(juce::Decibels::decibelsToGain(toneBandGainInDb));
-
-
-    auto eqPresenceValue = valueTree.getRawParameterValue("EQ_PRESENCE");
-    float eqPresence = eqPresenceValue->load();
-
     auto eqBassValue = valueTree.getRawParameterValue("EQ_BASS");
     float eqBass = eqBassValue->load();
 
@@ -238,7 +232,57 @@ void GainAndDspAudioProcessor::updateParams()
     auto eqHighValue = valueTree.getRawParameterValue("EQ_HIGH");
     float eqHigh = eqHighValue->load();
 
-    eqProcessor.setParameters(eqBass, eqMid, eqHigh, eqPresence);
+    EqProcessor::Band postEqLowest(
+        "Lowest",
+        EqProcessor::FilterType::HighPass,
+        144.0f, // frequency
+        1.1f    // q
+    );
+    EqProcessor::Band postEqLow(
+        "Low",
+        EqProcessor::FilterType::NoFilter,
+        0.0f, // frequency
+        0.0f, // q
+        0.0f, // gain
+        false // active
+    );
+    EqProcessor::Band postEqLowMids(
+        "Low Mids",
+        EqProcessor::FilterType::Peak,
+        304.0f,                        // frequency
+        1.1f,                          // q
+        juce::Decibels::decibelsToGain(eqBass) // gain
+    );
+    EqProcessor::Band postEqHighMids(
+        "High Mids",
+        EqProcessor::FilterType::Peak,
+        896.0f,                        // frequency
+        1.1f,                          // q
+        juce::Decibels::decibelsToGain(eqMid) // gain
+    );
+    EqProcessor::Band postEqHigh(
+        "High",
+        EqProcessor::FilterType::Peak,
+        2680.0f,                        // frequency
+        1.1f,                           // q
+        juce::Decibels::decibelsToGain(eqHigh) // gain
+    );
+    EqProcessor::Band postEqHighest(
+        "Highest",
+        EqProcessor::FilterType::NoFilter,
+        0.0f, // frequency
+        0.0f, // q
+        0.0f, // gain
+        false // active
+    );
+
+    eqProcessor.setBand(0, postEqLowest);
+    eqProcessor.setBand(1, postEqLow);
+    eqProcessor.setBand(2, postEqLowMids);
+    eqProcessor.setBand(3, postEqHighMids);
+    eqProcessor.setBand(4, postEqHigh);
+    eqProcessor.setBand(5, postEqHighest);
+    eqProcessor.setGain(6);
 
     //cabinet
     auto cabBypassValue = valueTree.getRawParameterValue("CAB_ACTIVE");
@@ -253,21 +297,33 @@ void GainAndDspAudioProcessor::updateParams()
         irProcessor.setCabSelectId(cabBoxSelect);
         cabBoxSelectOldValue = cabBoxSelect;
     }
+
+    //tone
+    auto toneValue = valueTree.getRawParameterValue("TONE_VALUE");
+    float tone = toneValue->load();
+
+    // Line equation for f(0) = -10 and f(10) = 5.4 (empirically tested values that sound good)
+    float toneBandGainInDb = 1.54 * tone - 10;
+    toneControlEqProcessor.setBandGain(juce::Decibels::decibelsToGain(toneBandGainInDb));
+
+    auto outputValue = valueTree.getRawParameterValue("OUTPUT_VALUE");
+    float output = outputValue->load();
+    outputLevelProcessor.setGainLinear(juce::Decibels::decibelsToGain(output));
 }
 
 //==============================================================================
-bool GainAndDspAudioProcessor::hasEditor() const
+bool TheGrillerAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* GainAndDspAudioProcessor::createEditor()
+juce::AudioProcessorEditor* TheGrillerAudioProcessor::createEditor()
 {
-    return new GainAndDspAudioProcessorEditor (*this);
+    return new TheGrillerAudioProcessorEditor (*this);
 }
 
 //==============================================================================
-void GainAndDspAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void TheGrillerAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
@@ -278,7 +334,7 @@ void GainAndDspAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     copyXmlToBinary(*xml, destData);
 }
 
-void GainAndDspAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void TheGrillerAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -294,31 +350,26 @@ void GainAndDspAudioProcessor::setStateInformation (const void* data, int sizeIn
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new GainAndDspAudioProcessor();
+    return new TheGrillerAudioProcessor();
 }
 
-juce::AudioProcessorValueTreeState::ParameterLayout GainAndDspAudioProcessor::createParameters()
+juce::AudioProcessorValueTreeState::ParameterLayout TheGrillerAudioProcessor::createParameters()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTER_CUTOFF", "FilterCutoff", 20.0f, 500.0f, 5.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTER_RES", "FilterRes", 0.1f, 1.0f, 0.1f));
-
+    //params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTER_RES", "FilterRes", 0.1f, 1.0f, 0.1f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_DRIVE", "GainDrive", 0.f, 1.f, 0.0001));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_RANGE", "GainRange", 0.f, 3000.f, 0.0001));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_BLEND", "GainBlend", 0.f, 1.f, 0.0001));
+    //params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_BLEND", "GainBlend", 0.f, 1.f, 0.0001));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN_VOLUME", "GainVolume", 0.f, 3.f, 0.0001));
-    
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("TONE_VALUE", "ToneValue", 0.0f, 10.0f, 0.1f));
-
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("EQ_PRESENCE", "EqPresence", -8.f, 8.f, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("EQ_BASS", "EqBass", -8.f, 8.f, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("EQ_MID", "EqMid", -8.f, 8.f, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("EQ_HIGH", "EqHigh", -8.f, 8.f, 0.f));
-
     params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_ACTIVE", "CabActive", true));
     params.push_back(std::make_unique<juce::AudioParameterInt>("CAB_BOX_SELECT", "CabBoxSelect", 1, 3, 1));
-
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("TONE_VALUE", "ToneValue", 0.0f, 10.0f, 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("OUTPUT_VALUE", "OutputValue", -30.0f, 10.0f, 0.1f));
 
     return { params.begin(), params.end() };
 }

@@ -622,7 +622,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\Eq4Band.cpp">
+    <ClCompile Include="..\..\Source\EqProcessor.cpp">
       <Filter>TheGriller\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\DynamicWaveshaper.cpp">
@@ -3192,7 +3192,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\Eq4Band.h">
+    <ClInclude Include="..\..\Source\EqProcessor.h">
       <Filter>TheGriller\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\DynamicWaveshaper.h">

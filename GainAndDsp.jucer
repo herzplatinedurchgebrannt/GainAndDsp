@@ -7,8 +7,8 @@
               pluginVST3Category="Distortion">
   <MAINGROUP id="p3hTYu" name="TheGriller">
     <GROUP id="{8EA04C08-550E-354E-39EB-289620D18BC9}" name="Source">
-      <FILE id="j0HjXc" name="Eq4Band.cpp" compile="1" resource="0" file="Source/Eq4Band.cpp"/>
-      <FILE id="ogQ7tZ" name="Eq4Band.h" compile="0" resource="0" file="Source/Eq4Band.h"/>
+      <FILE id="Rmt2SK" name="EqProcessor.cpp" compile="1" resource="0" file="Source/EqProcessor.cpp"/>
+      <FILE id="trOnPZ" name="EqProcessor.h" compile="0" resource="0" file="Source/EqProcessor.h"/>
       <FILE id="Jr9rNy" name="DynamicWaveshaper.cpp" compile="1" resource="0"
             file="Source/DynamicWaveshaper.cpp"/>
       <FILE id="K5kLMO" name="DynamicWaveshaper.h" compile="0" resource="0"

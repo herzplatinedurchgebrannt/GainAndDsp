@@ -12,18 +12,18 @@
 #include "DynamicWaveshaper.h"
 #include "SingleEqBandProcessor.h"
 #include "DistortionProcessor.h"
-#include "Eq4Band.h"
+#include "EqProcessor.h"
 #include "IRProcessor.h"
 
 //==============================================================================
 /**
 */
-class GainAndDspAudioProcessor  : public juce::AudioProcessor
+class TheGrillerAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    GainAndDspAudioProcessor();
-    ~GainAndDspAudioProcessor() override;
+    TheGrillerAudioProcessor();
+    ~TheGrillerAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -66,23 +66,23 @@ public:
 
 private:
 
-    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> lowPassFilter;
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> highPassFilter;
 
     DistortionAudioProcessor distortionProcessor;
     DynamicWaveshaper dynamicWaveshaper;
+    EqProcessor eqProcessor;
+    IRProcessor irProcessor;
+    
+    float eqBassOldValue = 0.f;
+    float eqMidOldValue = 0.f;
+    float eqHighOldValue = 0.f;
+    int cabBoxSelectOldValue = 1;
 
     SingleEqBandProcessor toneControlEqProcessor;
-
-    Eq4Band eqProcessor;
-    IRProcessor irProcessor;
-
-    
-
-    //bool cabSelectValueOld = true;
-    int cabBoxSelectOldValue = 1;
+    Gain<float> outputLevelProcessor;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainAndDspAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TheGrillerAudioProcessor)
 };

@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioProcessor& p)
+TheGrillerAudioProcessorEditor::TheGrillerAudioProcessorEditor (TheGrillerAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
     setSize(700, 400);
@@ -23,14 +23,6 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     filterCutoffDial.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&filterCutoffDial);
     filterCutoffAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_CUTOFF", filterCutoffDial);
-
-    filterResDial.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    filterResDial.setRange(0.1f, 1.0f);
-    filterResDial.setValue(2.0f);
-    filterResDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-    filterResDial.setPopupDisplayEnabled(true, true, this);
-    addAndMakeVisible(&filterResDial);
-    filterResAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "FILTER_RES", filterResDial);
 
     //distortion
     driveKnob.setSliderStyle(juce::Slider::Rotary);
@@ -45,32 +37,13 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     addAndMakeVisible(&rangeKnob);
     rangeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_RANGE", rangeKnob);
 
-    blendKnob.setSliderStyle(juce::Slider::Rotary);
-    blendKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-    blendKnob.setPopupDisplayEnabled(true, true, this);
-    addAndMakeVisible(&blendKnob);
-    blendAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_BLEND", blendKnob);
-
     volumeKnob.setSliderStyle(juce::Slider::Rotary);
     volumeKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
     volumeKnob.setPopupDisplayEnabled(true, true, this);
     addAndMakeVisible(&volumeKnob);
     volumeAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "GAIN_VOLUME", volumeKnob);
 
-    //tone
-    toneSlider.setSliderStyle(juce::Slider::Rotary);
-    toneSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-    toneSlider.setPopupDisplayEnabled(true, true, this);
-    addAndMakeVisible(&toneSlider);
-    toneValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "TONE_VALUE", toneSlider);
-
     //eq
-    eqPresenceKnob.setSliderStyle(juce::Slider::Rotary);
-    eqPresenceKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
-    eqPresenceKnob.setPopupDisplayEnabled(true, true, this);
-    addAndMakeVisible(&eqPresenceKnob);
-    eqPresenceAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "EQ_PRESENCE", eqPresenceKnob);
-
     eqBassKnob.setSliderStyle(juce::Slider::Rotary);
     eqBassKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
     eqBassKnob.setPopupDisplayEnabled(true, true, this);
@@ -104,14 +77,28 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     cabComboBox.addItem("Cab 3", 3);
     addAndMakeVisible(cabComboBox);
     cabComboBoxAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.valueTree, "CAB_BOX_SELECT", cabComboBox);
+
+    //tone
+    toneSlider.setSliderStyle(juce::Slider::Rotary);
+    toneSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    toneSlider.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&toneSlider);
+    toneValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "TONE_VALUE", toneSlider);
+
+    //output
+    outputSlider.setSliderStyle(juce::Slider::Rotary);
+    outputSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    outputSlider.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&outputSlider);
+    outputValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "OUTPUT_VALUE", outputSlider);
 }
 
-GainAndDspAudioProcessorEditor::~GainAndDspAudioProcessorEditor()
+TheGrillerAudioProcessorEditor::~TheGrillerAudioProcessorEditor()
 {
 }
 
 //==============================================================================
-void GainAndDspAudioProcessorEditor::paint (juce::Graphics& g)
+void TheGrillerAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     //g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
@@ -122,64 +109,65 @@ void GainAndDspAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll(juce::Colours::mintcream);
     
     g.setColour(juce::Colours::black);
-    juce::Rectangle <float> areaTop(25, 25, 650, 150);
-    g.drawRoundedRectangle(areaTop, 20.0f, 2.0f);
+    juce::Rectangle <float> areaAmp(25, 25, 450, 150);
+    g.drawRoundedRectangle(areaAmp, 20.0f, 2.0f);
 
-    juce::Rectangle <float> areaBottom(25, 200, 650, 150);
-    g.drawRoundedRectangle(areaBottom, 20.0f, 2.0f);
+    juce::Rectangle <float> areaCab(500, 25, 175, 150);
+    g.drawRoundedRectangle(areaCab, 20.0f, 2.0f);
+
+    juce::Rectangle <float> areaTone(25, 200, 650, 150);
+    g.drawRoundedRectangle(areaTone, 20.0f, 2.0f);
 
     g.setColour(juce::Colours::black);
     g.setFont(15.0f);
     juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
-    g.drawText("lx noise plugin", titleArea, juce::Justification::centredTop);
+    g.drawText("GUITAR AMP", titleArea, juce::Justification::centredTop);
 
     //filter
-    g.drawText("Cutoff",    ((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Resonance", ((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Cutoff",    ((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
 
     //distortion
     g.drawText("Drive",     ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
     g.drawText("Range",     ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Blend",     ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Volume",    ((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Volume",    ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
 
     //eq
-    g.drawText("Tone",      ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Bass",      ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Mid",       ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Treble",    ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
 
-    g.drawText("Presence",  ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
-    g.drawText("Bass",      ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
-    g.drawText("Mid",       ((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
-    g.drawText("Treble",    ((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
-
-
+    //tone
+    g.drawText("Tone",      ((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    
+    g.drawText("Output",    ((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
 }
 
-void GainAndDspAudioProcessorEditor::resized()
+void TheGrillerAudioProcessorEditor::resized()
 
 {
     juce::Rectangle<int> areaTop = getLocalBounds().reduced(40);
     juce::Rectangle<int> areaBottom = getLocalBounds().reduced(40);
 
     //filter
-    filterCutoffDial.setBounds(((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
-    filterResDial.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
+    filterCutoffDial.setBounds(((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
 
     //distortion
     driveKnob.setBounds( ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
     rangeKnob.setBounds( ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
-    blendKnob.setBounds( ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
-    volumeKnob.setBounds(((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
+    volumeKnob.setBounds(((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) - (100 / 2), 100, 100);
 
     //eq
-    toneSlider.setBounds(((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) +  125, 100, 100);
-
-    eqPresenceKnob.setBounds(((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
-    eqBassKnob.setBounds(((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
-    eqMidKnob.setBounds(((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
-    eqTrebleKnob.setBounds(((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
-
+    eqBassKnob.setBounds(((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+    eqMidKnob.setBounds(((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+    eqTrebleKnob.setBounds(((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
 
     //cabinet
-    cabBypass.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 125, 100, 30);
-    cabComboBox.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 175, 100, 30);
+    cabBypass.setBounds(((getWidth() / slRow) * 6) - (100 / 2) - 10, (getHeight() / slCol) - (100 / 2), 100, 30);
+    cabComboBox.setBounds(((getWidth() / slRow) * 6) - (100 / 2) - 10, (getHeight() / slCol) - (100 / 2) + 50, 100, 30);
+
+    //tone 
+    toneSlider.setBounds(((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+
+    //output 
+    outputSlider.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
 }
