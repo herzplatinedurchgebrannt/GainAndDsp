@@ -72,7 +72,8 @@ private:
 
     IRProcessor irProcessor;
 
-    bool cabSelectValueOld = true;
+    //bool cabSelectValueOld = true;
+    int cabBoxSelectOldValue = 1;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 

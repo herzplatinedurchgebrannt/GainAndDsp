@@ -222,14 +222,23 @@ void GainAndDspAudioProcessor::updateParams()
     bool cabIsActive = cabBypassValue->load();
     irProcessor.setBypass(!cabIsActive);
 
-    auto cabSelectValue = valueTree.getRawParameterValue("CAB_SELECT");
-    bool cabOneSelected = cabSelectValue->load();
+    auto cabBoxSelectValue = valueTree.getRawParameterValue("CAB_BOX_SELECT");
+    int cabBoxSelect = cabBoxSelectValue->load();
 
-    if (cabOneSelected != cabSelectValueOld) 
+    if (cabBoxSelect != cabBoxSelectOldValue) 
     {
-        irProcessor.setSelection(cabOneSelected);
-        cabSelectValueOld = cabOneSelected;
+        irProcessor.setCabSelectId(cabBoxSelect);
+        cabBoxSelectOldValue = cabBoxSelect;
     }
+
+    //auto cabSelectValue = valueTree.getRawParameterValue("CAB_SELECT");
+    //bool cabOneSelected = cabSelectValue->load();
+
+    //if (cabOneSelected != cabSelectValueOld) 
+    //{
+    //    irProcessor.setSelection(cabOneSelected);
+    //    cabSelectValueOld = cabOneSelected;
+    //}
 }
 
 //==============================================================================
@@ -289,7 +298,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout GainAndDspAudioProcessor::cr
     params.push_back(std::make_unique<juce::AudioParameterFloat>("TONE_VALUE", "ToneValue", 0.0f, 10.0f, 0.1f));
 
     params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_ACTIVE", "CabActive", true));
-    params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_SELECT", "CabSelect", true));
+    params.push_back(std::make_unique<juce::AudioParameterInt>("CAB_BOX_SELECT", "CabBoxSelect", 1, 3, 1));
+    //params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_SELECT", "CabSelect", true));
 
     return { params.begin(), params.end() };
 }

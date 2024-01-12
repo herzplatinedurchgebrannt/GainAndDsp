@@ -39,8 +39,14 @@ void IRProcessor::setBypass(bool bypassValue) {
     bypass = bypassValue;
 }
 
-void IRProcessor::setSelection(bool cabSelectionValue) {
-    cabOneIsSelected = cabSelectionValue;
+//void IRProcessor::setSelection(bool cabSelectionValue) {
+//    cabOneIsSelected = cabSelectionValue;
+//
+//    updateParameters();
+//}
+
+void IRProcessor::setCabSelectId(int cabSelectNewValue) {
+    cabSelectId = cabSelectNewValue;
 
     updateParameters();
 }
@@ -51,7 +57,7 @@ void IRProcessor::updateParameters()
     //manager.registerBasicFormats();
 
 
-    //this approach is better suited for external samples
+    //this approach is suited for external samples
     //juce::String assetName = (cabOneIsSelected == true ? "cabsim.wav" : "cabsim_2.wav");
 
     //juce::File file = juce::File::getSpecialLocation(juce::File::SpecialLocationType::currentApplicationFile);
@@ -64,46 +70,45 @@ void IRProcessor::updateParameters()
     //    std::move(x)
     //) };
 
-    if (cabOneIsSelected) {
-        juce::AudioFormatManager manager;
-        manager.registerBasicFormats();
-        std::unique_ptr<juce::AudioFormatReader> reader{ manager.createReaderFor(
-            std::make_unique<juce::MemoryInputStream>(BinaryData::cabsim_wav, BinaryData::cabsim_wavSize, true)
-        ) };
+    const char* currentCab;
+    int currentCabSize;;
 
-
-        if (reader == nullptr)
-        {
-            jassertfalse;
-            return;
-        }
-
-        juce::AudioBuffer<float> buffer(static_cast<int> (reader->numChannels),
-            static_cast<int> (reader->lengthInSamples));
-        reader->read(buffer.getArrayOfWritePointers(), buffer.getNumChannels(), 0, buffer.getNumSamples());
-
-        bufferTransfer.set(BufferWithSampleRate{ std::move(buffer), reader->sampleRate });
+    switch (cabSelectId)
+    {
+    case 1:
+        currentCab = BinaryData::cabsim_wav;
+        currentCabSize = BinaryData::cabsim_wavSize;
+        break;
+    case 2:
+        currentCab = BinaryData::cabsim_2_wav;
+        currentCabSize = BinaryData::cabsim_2_wavSize;
+        break;    
+    case 3:
+        currentCab = BinaryData::cabsim_3_wav;
+        currentCabSize = BinaryData::cabsim_3_wavSize;
+        break;
+    default:
+        break;
     }
-    else {
-        juce::AudioFormatManager manager;
-        manager.registerBasicFormats();
-        std::unique_ptr<juce::AudioFormatReader> reader{ manager.createReaderFor(
-            std::make_unique<juce::MemoryInputStream>(BinaryData::cabsim_2_wav, BinaryData::cabsim_2_wavSize, true)
-        ) };
+
+    juce::AudioFormatManager manager;
+    manager.registerBasicFormats();
+    std::unique_ptr<juce::AudioFormatReader> reader{ manager.createReaderFor(
+        std::make_unique<juce::MemoryInputStream>(currentCab, currentCabSize, true)
+    ) };
 
 
-        if (reader == nullptr)
-        {
-            jassertfalse;
-            return;
-        }
-
-        juce::AudioBuffer<float> buffer(static_cast<int> (reader->numChannels),
-            static_cast<int> (reader->lengthInSamples));
-        reader->read(buffer.getArrayOfWritePointers(), buffer.getNumChannels(), 0, buffer.getNumSamples());
-
-        bufferTransfer.set(BufferWithSampleRate{ std::move(buffer), reader->sampleRate });
+    if (reader == nullptr)
+    {
+        jassertfalse;
+        return;
     }
+
+    juce::AudioBuffer<float> buffer(static_cast<int> (reader->numChannels),
+        static_cast<int> (reader->lengthInSamples));
+    reader->read(buffer.getArrayOfWritePointers(), buffer.getNumChannels(), 0, buffer.getNumSamples());
+
+    bufferTransfer.set(BufferWithSampleRate{ std::move(buffer), reader->sampleRate });
 
 
 

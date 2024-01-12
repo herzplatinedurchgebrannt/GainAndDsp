@@ -60,6 +60,9 @@ private:
     juce::TextButton cabSelect;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> cabSelectAttachement;
 
+    juce::ComboBox cabComboBox;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> cabComboBoxAttachement;
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     GainAndDspAudioProcessor& audioProcessor;
