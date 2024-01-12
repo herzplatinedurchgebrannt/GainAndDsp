@@ -105,6 +105,9 @@ void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getMainBusNumOutputChannels();
 
+    lowPassFilter.reset();
+    lowPassFilter.prepare(spec);
+
     dynamicWaveshaper.prepare(spec);
 
     updateParams();
@@ -118,8 +121,7 @@ void GainAndDspAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     toneControlEqProcessor.setBand(toneControlEqBand);
     toneControlEqProcessor.prepare(spec);
 
-    lowPassFilter.reset();
-    lowPassFilter.prepare(spec);
+    eqProcessor.prepare(spec);
 
     irProcessor.reset();
     irProcessor.prepare(spec);
@@ -131,17 +133,7 @@ void GainAndDspAudioProcessor::releaseResources()
     // spare memory, etc.
 }
 
-void GainAndDspAudioProcessor::updateFilter()
-{
-    auto filterCutoffValue = valueTree.getRawParameterValue("FILTER_CUTOFF");
-    float filterCutoff = filterCutoffValue->load();
 
-    auto filterResValue = valueTree.getRawParameterValue("FILTER_RES");
-    float filterRes = filterResValue->load();
-
-    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(lastSampleRate, filterCutoff, filterRes);
-
-}
 
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool GainAndDspAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
@@ -183,15 +175,16 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context = juce::dsp::ProcessContextReplacing<float>(block);
 
-    updateFilter();
+    updateParams();
     lowPassFilter.process(context);
 
-    updateParams();
     distortionProcessor.process(context);
 
     dynamicWaveshaper.process(context);
 
     toneControlEqProcessor.process(context);
+
+    eqProcessor.process(context);
 
     context.isBypassed = true;
     irProcessor.process(context);
@@ -200,7 +193,16 @@ void GainAndDspAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
 
 void GainAndDspAudioProcessor::updateParams()
 {
-    //get the current slider values
+    //highpass filter
+    auto filterCutoffValue = valueTree.getRawParameterValue("FILTER_CUTOFF");
+    float filterCutoff = filterCutoffValue->load();
+
+    auto filterResValue = valueTree.getRawParameterValue("FILTER_RES");
+    float filterRes = filterResValue->load();
+
+    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(lastSampleRate, filterCutoff, filterRes);
+
+    //distortion
     auto driveValue = valueTree.getRawParameterValue("GAIN_DRIVE");
     float drive = driveValue->load();
 
@@ -215,12 +217,28 @@ void GainAndDspAudioProcessor::updateParams()
 
     distortionProcessor.setValues(drive, range, blend, volume);
 
+    //eq
     auto toneValue = valueTree.getRawParameterValue("TONE_VALUE");
     float tone = toneValue->load();
 
     // Line equation for f(0) = -10 and f(10) = 5.4 (empirically tested values that sound good)
     float toneBandGainInDb = 1.54 * tone - 10;
     toneControlEqProcessor.setBandGain(juce::Decibels::decibelsToGain(toneBandGainInDb));
+
+
+    auto eqPresenceValue = valueTree.getRawParameterValue("EQ_PRESENCE");
+    float eqPresence = eqPresenceValue->load();
+
+    auto eqBassValue = valueTree.getRawParameterValue("EQ_BASS");
+    float eqBass = eqBassValue->load();
+
+    auto eqMidValue = valueTree.getRawParameterValue("EQ_MID");
+    float eqMid = eqMidValue->load();
+
+    auto eqHighValue = valueTree.getRawParameterValue("EQ_HIGH");
+    float eqHigh = eqHighValue->load();
+
+    eqProcessor.setParameters(eqBass, eqMid, eqHigh, eqPresence);
 
     //cabinet
     auto cabBypassValue = valueTree.getRawParameterValue("CAB_ACTIVE");
@@ -235,15 +253,6 @@ void GainAndDspAudioProcessor::updateParams()
         irProcessor.setCabSelectId(cabBoxSelect);
         cabBoxSelectOldValue = cabBoxSelect;
     }
-
-    //auto cabSelectValue = valueTree.getRawParameterValue("CAB_SELECT");
-    //bool cabOneSelected = cabSelectValue->load();
-
-    //if (cabOneSelected != cabSelectValueOld) 
-    //{
-    //    irProcessor.setSelection(cabOneSelected);
-    //    cabSelectValueOld = cabOneSelected;
-    //}
 }
 
 //==============================================================================
@@ -302,9 +311,14 @@ juce::AudioProcessorValueTreeState::ParameterLayout GainAndDspAudioProcessor::cr
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>("TONE_VALUE", "ToneValue", 0.0f, 10.0f, 0.1f));
 
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("EQ_PRESENCE", "EqPresence", -8.f, 8.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("EQ_BASS", "EqBass", -8.f, 8.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("EQ_MID", "EqMid", -8.f, 8.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("EQ_HIGH", "EqHigh", -8.f, 8.f, 0.f));
+
     params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_ACTIVE", "CabActive", true));
     params.push_back(std::make_unique<juce::AudioParameterInt>("CAB_BOX_SELECT", "CabBoxSelect", 1, 3, 1));
-    //params.push_back(std::make_unique<juce::AudioParameterBool>("CAB_SELECT", "CabSelect", true));
+
 
     return { params.begin(), params.end() };
 }

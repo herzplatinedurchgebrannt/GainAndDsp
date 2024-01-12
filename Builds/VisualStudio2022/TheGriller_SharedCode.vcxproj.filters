@@ -622,10 +622,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\BaseWaveshaper.cpp">
-      <Filter>TheGriller\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ParametricWaveshaper.cpp">
+    <ClCompile Include="..\..\Source\Eq4Band.cpp">
       <Filter>TheGriller\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\DynamicWaveshaper.cpp">
@@ -3195,10 +3192,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\BaseWaveshaper.h">
-      <Filter>TheGriller\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ParametricWaveshaper.h">
+    <ClInclude Include="..\..\Source\Eq4Band.h">
       <Filter>TheGriller\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\DynamicWaveshaper.h">

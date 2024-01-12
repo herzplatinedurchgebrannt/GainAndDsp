@@ -15,17 +15,6 @@ void IRProcessor::prepare(const ProcessSpec& spec)
 void IRProcessor::process(ProcessContextReplacing<float> context)
 {
     context.isBypassed = bypass;
-
-    // Load a new IR if there's one available. Note that this doesn't lock or allocate!
-    bufferTransfer.get([this](BufferWithSampleRate& buf)
-        {
-            convolution.loadImpulseResponse(std::move(buf.buffer),
-            buf.sampleRate,
-            Convolution::Stereo::yes,
-            Convolution::Trim::yes,
-            Convolution::Normalise::yes);
-        });
-
     convolution.process(context);
     gain.process(context);
 }
@@ -110,6 +99,14 @@ void IRProcessor::updateParameters()
 
     bufferTransfer.set(BufferWithSampleRate{ std::move(buffer), reader->sampleRate });
 
-
+    // Load a new IR if there's one available. Note that this doesn't lock or allocate!
+    bufferTransfer.get([this](BufferWithSampleRate& buf)
+        {
+            convolution.loadImpulseResponse(std::move(buf.buffer),
+            buf.sampleRate,
+            Convolution::Stereo::yes,
+            Convolution::Trim::yes,
+            Convolution::Normalise::yes);
+        });
 
 }

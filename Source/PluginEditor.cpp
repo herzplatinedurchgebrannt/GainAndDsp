@@ -64,6 +64,31 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     addAndMakeVisible(&toneSlider);
     toneValueAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "TONE_VALUE", toneSlider);
 
+    //eq
+    eqPresenceKnob.setSliderStyle(juce::Slider::Rotary);
+    eqPresenceKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    eqPresenceKnob.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&eqPresenceKnob);
+    eqPresenceAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "EQ_PRESENCE", eqPresenceKnob);
+
+    eqBassKnob.setSliderStyle(juce::Slider::Rotary);
+    eqBassKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    eqBassKnob.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&eqBassKnob);
+    eqBassAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "EQ_BASS", eqBassKnob);
+
+    eqMidKnob.setSliderStyle(juce::Slider::Rotary);
+    eqMidKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    eqMidKnob.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&eqMidKnob);
+    eqMidAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "EQ_MID", eqMidKnob);
+
+    eqTrebleKnob.setSliderStyle(juce::Slider::Rotary);
+    eqTrebleKnob.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 100);
+    eqTrebleKnob.setPopupDisplayEnabled(true, true, this);
+    addAndMakeVisible(&eqTrebleKnob);
+    eqTrebleAttachement = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.valueTree, "EQ_HIGH", eqTrebleKnob);
+
     //cabinet
     cabBypass.setButtonText("Bypass");
     cabBypass.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey);
@@ -73,15 +98,6 @@ GainAndDspAudioProcessorEditor::GainAndDspAudioProcessorEditor (GainAndDspAudioP
     cabBypass.setClickingTogglesState(true);
     addAndMakeVisible(cabBypass);
     cabBypassAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.valueTree, "CAB_ACTIVE", cabBypass);
-
-    //cabSelect.setButtonText("Select");
-    //cabSelect.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey);
-    //cabSelect.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::mintcream);
-    //cabSelect.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::black);
-    //cabSelect.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
-    //cabSelect.setClickingTogglesState(true);
-    //addAndMakeVisible(cabSelect);
-    //cabSelectAttachement = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.valueTree, "CAB_SELECT", cabSelect);
 
     cabComboBox.addItem("Cab 1", 1);
     cabComboBox.addItem("Cab 2", 2);
@@ -122,13 +138,18 @@ void GainAndDspAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawText("Resonance", ((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
 
     //distortion
-    g.drawText("Drive",  ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Range",  ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Blend",  ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
-    g.drawText("Volume", ((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Drive",     ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Range",     ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Blend",     ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
+    g.drawText("Volume",    ((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 5, 100, 100, juce::Justification::centred, false);
 
     //eq
-    g.drawText("Tone", ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Tone",      ((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+
+    g.drawText("Presence",  ((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Bass",      ((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Mid",       ((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
+    g.drawText("Treble",    ((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 180, 100, 100, juce::Justification::centred, false);
 
 
 }
@@ -152,9 +173,13 @@ void GainAndDspAudioProcessorEditor::resized()
     //eq
     toneSlider.setBounds(((getWidth() / slRow) * 1) - (100 / 2), (getHeight() / slCol) +  125, 100, 100);
 
+    eqPresenceKnob.setBounds(((getWidth() / slRow) * 2) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+    eqBassKnob.setBounds(((getWidth() / slRow) * 3) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+    eqMidKnob.setBounds(((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+    eqTrebleKnob.setBounds(((getWidth() / slRow) * 5) - (100 / 2), (getHeight() / slCol) + 125, 100, 100);
+
+
     //cabinet
     cabBypass.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 125, 100, 30);
     cabComboBox.setBounds(((getWidth() / slRow) * 6) - (100 / 2), (getHeight() / slCol) + 175, 100, 30);
-
-    //cabSelect.setBounds(((getWidth() / slRow) * 4) - (100 / 2), (getHeight() / slCol) + 125, 100, 30);
 }

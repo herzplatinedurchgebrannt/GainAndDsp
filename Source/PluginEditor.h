@@ -53,12 +53,20 @@ private:
     juce::Slider toneSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> toneValueAttachement;
 
+    //eq
+    juce::Slider eqPresenceKnob;
+    juce::Slider eqBassKnob;
+    juce::Slider eqMidKnob;
+    juce::Slider eqTrebleKnob;
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> eqPresenceAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> eqBassAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> eqMidAttachement;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> eqTrebleAttachement;
+
     //cabinet
     juce::TextButton cabBypass;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> cabBypassAttachement;
-
-    juce::TextButton cabSelect;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> cabSelectAttachement;
 
     juce::ComboBox cabComboBox;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> cabComboBoxAttachement;

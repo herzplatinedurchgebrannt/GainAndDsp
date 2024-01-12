@@ -22,7 +22,7 @@ DistortionAudioProcessor::~DistortionAudioProcessor()
 
 void DistortionAudioProcessor::prepare(const::juce::dsp::ProcessSpec& spec) noexcept 
 {
-    _sampleRate = spec.sampleRate;
+    sampleRate = spec.sampleRate;
 }
 
 void DistortionAudioProcessor::process(const juce::dsp::ProcessContextReplacing<float>& context) noexcept 
@@ -59,17 +59,17 @@ float DistortionAudioProcessor::processSample(float sample)
     float output = sample;
     float cleanSig = sample;
 
-    output *= _drive * _range;
+    output *= drive * range;
 
-    output = (((((2.f / juce::float_Pi) * atan(output)) * _blend) + (cleanSig * (1.f - _blend))) / 2.f) * _volume;
+    output = (((((2.f / juce::float_Pi) * atan(output)) * blend) + (cleanSig * (1.f - blend))) / 2.f) * volume;
 
     return output;
 }
 
-void DistortionAudioProcessor::setValues(float drive, float range, float blend, float volume)
+void DistortionAudioProcessor::setValues(float driveNewValue, float rangeNewValue, float blendNewValue, float volumeNewValue)
 {
-    _drive = drive;
-    _range = range;
-    _blend = blend;
-    _volume = volume;
+    drive = driveNewValue;
+    range = rangeNewValue;
+    blend = blendNewValue;
+    volume = volumeNewValue;
 }

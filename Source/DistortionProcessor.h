@@ -25,11 +25,11 @@ public:
 
 private:
 
-    float _sampleRate = 0;
-    float _drive = 0.5f;
-    float _range = 1500.0f;
-    float _blend = 0.5f;
-    float _volume = 1.0f;
+    float sampleRate = 0;
+    float drive = 0.5f;
+    float range = 1500.0f;
+    float blend = 0.5f;
+    float volume = 1.0f;
 };
 
 

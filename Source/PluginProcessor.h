@@ -12,6 +12,7 @@
 #include "DynamicWaveshaper.h"
 #include "SingleEqBandProcessor.h"
 #include "DistortionProcessor.h"
+#include "Eq4Band.h"
 #include "IRProcessor.h"
 
 //==============================================================================
@@ -58,7 +59,6 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     void updateParams();
-    void updateFilter();
 
     juce::AudioProcessorValueTreeState valueTree;
 
@@ -73,7 +73,10 @@ private:
 
     SingleEqBandProcessor toneControlEqProcessor;
 
+    Eq4Band eqProcessor;
     IRProcessor irProcessor;
+
+    
 
     //bool cabSelectValueOld = true;
     int cabBoxSelectOldValue = 1;
