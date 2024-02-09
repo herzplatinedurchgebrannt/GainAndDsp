@@ -319,7 +319,10 @@ bool TheGrillerAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* TheGrillerAudioProcessor::createEditor()
 {
-    return new TheGrillerAudioProcessorEditor (*this);
+    //return new TheGrillerAudioProcessorEditor (*this);
+
+    //return generic processoreditor to have no gui
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
