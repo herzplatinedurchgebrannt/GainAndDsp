@@ -4,7 +4,7 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               companyName="herzplatine.dsp" companyEmail="alexandermathieu@googlemail.com"
               companyWebsite="https://github.com/herzplatinedurchgebrannt"
-              pluginVST3Category="Distortion" pluginFormats="buildLV2,buildStandalone,buildVST3">
+              pluginVST3Category="Distortion" pluginFormats="buildLV2">
   <MAINGROUP id="p3hTYu" name="TheGriller">
     <GROUP id="{8EA04C08-550E-354E-39EB-289620D18BC9}" name="Source">
       <FILE id="Rmt2SK" name="EqProcessor.cpp" compile="1" resource="0" file="Source/EqProcessor.cpp"/>
